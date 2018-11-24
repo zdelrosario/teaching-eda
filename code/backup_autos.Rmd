@@ -1,0 +1,302 @@
+---
+title: "autos Backup"
+author: "Zach"
+date: 2018-11-23
+output:
+  github_document:
+  toc: true
+---
+
+The following is a pre-baked analysis of the UCI `autos` dataset. Our goal is to
+understand the relationship between vehicle characteristics and their 'risk', as
+defined by actuarial risk adjustment (`symboling`). Actuaries assign these
+values for insurance purposes, and it affects the premium a car owner pays for
+insuring the vehicle (riskier vehicles tend to be more pricey to insure).
+
+```{r setup, echo=FALSE, warning=FALSE}
+library(tidyverse)
+library(GGally)
+
+## Data filename
+file_name <- "~/Sync/data/autos/imports-85.data"
+## Variable names from the UCI site
+var_names <-
+  c(
+    "symboling",          # Actuarial risk adjustment: -3 Safest, +3 Riskiest
+    "normalized_losses",  # Average insurance loss, averaged over body_style
+    "make",               # Manufacturer
+    "fuel_type",          # Gas or diesel
+    "aspiration",         # Standard or turbo
+    "num_of_doors",       #
+    "body_style",         # hardtop, wagon, sedan, hatchback, convertible
+    "drive_wheels",       # Front, rear, all
+    "engine_location",    # Front, rear
+    "wheel_base",         # Distance between front & rear wheels
+    "length",             #
+    "width",              #
+    "height",             #
+    "curb_weight",        # Weight w/o cargo
+    "engine_type",        # Engine layout
+    "num_of_cylinders",   #
+    "engine_size",        # Total engine displacement
+    "fuel_system",        # Fuel feed system
+    "bore",               # Cylinder diameter
+    "stroke",             # Cylinder displacement distance
+    "compression_ratio",  # Swept volume compression ratio
+    "horsepower",         # Engine power
+    "peak_rpm",           # Peak rotations per minute (redline?)
+    "city_mpg",           # City fuel efficiency
+    "highway_mpg",        # Highway fuel efficiency
+    "price"               # MSRP
+  )
+
+## Helper functions
+## --------------------------------------------------
+parse_numchar <- function(x) {
+  case_when(
+        x == "two" ~ 2L,
+        x == "three" ~ 3L,
+        x == "four" ~ 4L,
+        x == "five" ~ 5L,
+        x == "six" ~ 6L,
+        x == "seven" ~ 7L,
+        x == "eight" ~ 8L,
+        x == "nine" ~ 9L,
+        x == "ten" ~ 10L,
+        x == "eleven" ~ 11L,
+        x == "twelve" ~ 12L,
+        TRUE ~ NA_integer_
+      )
+}
+```
+
+## Wrangling
+<!-- ------------------------------------------------- -->
+
+Hadley Wickham says that "importing data is 80% boredom and 20% screaming" --
+I've done the screaming here so you don't have to!
+
+The data are essentially in CSV format, though we'll need to do some wrangling.
+
+```{r load_n_wrangle}
+df_raw <-
+  read_csv(
+    file_name,
+    col_names = var_names,
+    col_types = cols(
+      .default = col_number(),
+      symboling = col_integer(),
+      normalized_losses = col_integer(),
+      make = col_character(),
+      fuel_type = col_character(),
+      aspiration = col_character(),
+      num_of_doors = col_character(), # Needs manual fix!
+      body_style = col_character(),
+      drive_wheels = col_character(),
+      engine_location = col_character(),
+      engine_type = col_character(),
+      num_of_cylinders = col_character(), # Also needs manual fix!
+      engine_size = col_integer(),
+      fuel_system = col_character()
+    )
+  )
+```
+
+The string-coded numbers are obnoxious; let's map those to integers.
+
+```{r}
+df_raw %>% pull(num_of_doors) %>% unique()
+df_raw %>% pull(num_of_cylinders) %>% unique()
+```
+
+Manual fixes for some of the variables.
+
+```{r}
+df_autos <-
+  df_raw %>%
+  mutate(
+    num_of_doors = parse_numchar(num_of_doors),
+    num_of_cylinders = parse_numchar(num_of_cylinders)
+  )
+```
+
+Finally, we can analyze the data.
+
+## Analysis
+<!-- ------------------------------------------------- -->
+
+Our objective with these data is to determine how various attributes of
+automobiles affect actuarial risk. To that end, we'll follow a hierarchy of
+exploratory tasks, aimed at 1. understanding the individual variables,
+2. understanding relationships between the various inputs, and 3. understanding
+how the inputs (predictors) affect the output (response).
+
+### 1. One-dimensional analysis
+<!-- -------------------------------------------------- -->
+
+When coming to a new dataset, we should start with a `glimpse()` and a
+`summary()`.
+
+```{r}
+df_autos %>% glimpse()
+df_autos %>% summary()
+```
+
+The numeric input variables (predictors) seem to break down into
+
+| Geometry   | `wheel_base`, `length`, `width`, `height`, `curb_weight` |
+| Engine     | `engine_size`, `num_of_cylinders`, `engine_size`, `bore`, `stroke`, `compression_ratio`, `horsepower`, `peak_rpm` |
+| Efficiency | `city_mpg`, `highway_mpg` |
+| Monetary   | `price` |
+| Categorical   | `make`, `fuel_type`, `aspiration`, `body_style`, `drive_wheels`, `engine_location` |
+
+#### Categorical variables
+<!-- ------------------------- -->
+
+Categorical variables take specific, fixed values. For instance, `body_style`
+takes the values `r df_autos %>% pull(body_style) %>% unique`. To get a sense of
+each variable, we'll just report the total number of each instance in the data
+set in a bar graph.
+
+```{r eda1d_helper}
+make_1d_bar <- function(varname) {
+  var = enquo(varname)
+
+  df_autos %>%
+    count(!! var) %>%
+    ggplot(aes(fct_reorder(!! var, n), n)) +
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 315))
+}
+
+make_1d_hist <- function(varname, bins = 30) {
+  var = enquo(varname)
+
+  df_autos %>%
+    ggplot(aes(!! var)) +
+    geom_histogram(bins = bins)
+}
+```
+
+```{r eda1d_make}
+make_1d_bar(make)
+```
+
+We can see that we have many more models from Japanese manufacturers; attributes
+of these vehicles will be over-represented in our data.
+
+```{r eda1d_body_style}
+make_1d_bar(body_style)
+```
+
+We also see far more sedans and hatchbacks than other body styles.
+
+```{r eda1d_engine_location}
+make_1d_bar(engine_location)
+```
+
+We have almost exclusively front-engine vehicles.
+
+```{r eda1d_fuel_type}
+make_1d_bar(fuel_type)
+```
+
+There are not many diesel engines in this dataset.
+
+#### Continuous variables
+<!-- ------------------------- -->
+
+Continuous variables can take an infinite number of values; for instance 1 / n
+for n = 1,2,.... Because of this, we can't do a bar graph as above. Instead, we
+define a number of continuous bins into which we sort the continuous values.
+This is called a 'histogram'.
+
+```{r eda1d_mpg}
+make_1d_hist(horsepower, bins = 20)
+```
+
+Rule 1 of Histograms is: Play with the bin size!
+
+```{r eda1d_mpg}
+make_1d_hist(horsepower, bins = 40)
+```
+
+There are many 'fingers' in the horsepower distribution; this is revealed by
+varying the number of bins.
+
+```{r eda1d_engine_size}
+make_1d_hist(engine_size, bins = 30)
+```
+
+```{r eda1d_curb_weight}
+make_1d_hist(curb_weight, bins = 30)
+```
+
+```{r eda1d_compression_ratio}
+make_1d_hist(compression_ratio, bins = 30)
+```
+
+There is a fair bit of bi-modality in compression ratio!
+
+```{r eda1d_peak_rpm}
+make_1d_hist(peak_rpm, bins = 20)
+```
+
+```{r eda1d_city_mpg}
+make_1d_hist(city_mpg, bins = 30)
+```
+
+```{r eda1d_highway_mpg}
+make_1d_hist(highway_mpg, bins = 30)
+```
+
+```{r eda1d_price}
+make_1d_hist(price, bins = 25)
+```
+
+Price is bounded below by zero, so it will tend to be heavily 'skewed' or
+tilted. We say this distribution has a 'long right tail', as there are few
+instances with very large values.
+
+### 2. Pairwise analysis
+<!-- -------------------------------------------------- -->
+
+```{r pairs}
+df_autos %>%
+  ## select_if(is.numeric) %>%
+  select(
+    body_style,
+    curb_weight,
+    engine_size,
+    compression_ratio,
+    horsepower,
+    city_mpg,
+    highway_mpg,
+    price
+  ) %>%
+  ggpairs()
+```
+
+### 3. Predictor-response analysis
+<!-- -------------------------------------------------- -->
+
+### Fun fact
+<!-- -------------------------------------------------- -->
+There's one last thing to note in these data:
+
+```{r}
+df_autos %>%
+  ggplot(aes(price)) +
+  geom_smooth(aes(y = highway_mpg, color = "Highway")) +
+  geom_smooth(aes(y = city_mpg, color = "City")) +
+  geom_point(aes(y = highway_mpg, color = "Highway")) +
+  geom_point(aes(y = city_mpg, color = "City")) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(
+    x = "Price",
+    y = "Efficiency"
+  )
+```
+
+More expensive cars are less efficient! You get what you pay for, I suppose....
