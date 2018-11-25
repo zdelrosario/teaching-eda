@@ -225,7 +225,7 @@ There are many 'fingers' in the horsepower distribution; this is revealed by
 varying the number of bins.
 
 ```{r eda1d_engine_size}
-make_1d_hist(engine_size, bins = 30)
+make_1d_hist(engine_size, bins = 35)
 ```
 
 ```{r eda1d_curb_weight}
@@ -236,7 +236,8 @@ make_1d_hist(curb_weight, bins = 30)
 make_1d_hist(compression_ratio, bins = 30)
 ```
 
-There is a fair bit of bi-modality in compression ratio!
+There is a fair bit of bi-modality in compression ratio! Let's follow this up
+below.
 
 ```{r eda1d_peak_rpm}
 make_1d_hist(peak_rpm, bins = 20)
@@ -275,6 +276,23 @@ df_autos %>%
     price
   ) %>%
   ggpairs()
+```
+
+```{r diesel_w_cr}
+df_autos %>%
+  ggplot(aes(compression_ratio, color = fuel_type, group = fuel_type)) +
+  geom_freqpoly()
+```
+
+Diesel engines use compression ignition (rather than spark ignition), and so
+tend to be of higher CR than petrol engines.
+
+```{r horsepower_v_other}
+df_autos %>%
+  ggplot(aes(horsepower, engine_size)) +
+  ## geom_point(aes(color = make), size = 0.5, alpha = 1 / 3) +
+  geom_hex(bins = 35) +
+  theme(legend.position = "bottom")
 ```
 
 ### 3. Predictor-response analysis
