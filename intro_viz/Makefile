@@ -12,7 +12,6 @@ SOLUTION = solution
 CHALLENGE = challenge
 
 all: ${SOLUTION}.Rmd ${CHALLENGE}.Rmd
-	./knit.R
 
 ${SOLUTION}.Rmd: ${MASTER}.Rmd
 	sed -E \

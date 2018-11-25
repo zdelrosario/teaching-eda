@@ -151,11 +151,19 @@ __q1.2__ Why are there five bars?
 There are five kinds of `body_style` that appear in the data; they are `r df_autos %>% pull(body_style) %>% unique`.
 <!-- solution-end -->
 
-__q1.3__ Could we plot `length` this way?
+__q1.3__ Would would happen if we tried plotting `length` this way?
 
 <!-- solution-begin -->
-No; there are too many different values of `length` in the data. We would need to use a different strategy
-to plot `length` in this fashion.
+Let's try it!
+
+```{r bar_length}
+df_autos %>% 
+  ggplot(aes(length)) +
+  geom_bar()
+```
+
+There are *many* different values of `length` in the data. It's very challenging to tell what's going
+on based on this figure. Perhaps a different strategy will work better....
 <!-- solution-end -->
 
 ### Histograms
@@ -173,6 +181,9 @@ __q1.1__ What does this plot show?
 This shows the number of cars in the data landing in particular 'bins' of `length`. Above,
 we have chosen to chop the range of values of `length` up into `25` equal-spaced bins,
 and plot the number of cars in each bin much like the bar graph above.
+
+We can see that many of the cars are about `175` inches in length; though there are a fair number
+just below `160` and around `190`.
 <!-- solution-end -->
 
 __q2.2__ How does this plot differ from the bar graph above?
