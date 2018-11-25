@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{listings}
+% Configure listings
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+  language=R,                     % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},      % keyword style
+  commentstyle=\color{dkgreen},   % comment style
+  stringstyle=\color{mauve},      % string literal style
+  escapeinside={\%*}{*)},         % if you want to add a comment within your code
+  morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+\begin{document}
+
+% --------------------------------------------------
+\section{Directions}
+% --------------------------------------------------
+Please follow the following directions:
+
+\begin{enumerate}
+\item Read Section \ref{sec:summary} (Summary) by yourself; try to answer the
+  questions on your own
+\item When prompted, discuss all Sections with your small group
+\item When prompted, join in the full-group discussion
+\end{enumerate}
+
+% --------------------------------------------------
+\section{Summary} \label{sec:summary}
+% --------------------------------------------------
+Take a look at the following code output, and answer the following questions:
+
+\begin{lstlisting}
+> df_autos %>% select_if(is.numeric) %>% summary
+   symboling       normalized_losses  num_of_doors     wheel_base
+ Min.   :-2.0000   Min.   : 65       Min.   :2.000   Min.   : 86.60
+ 1st Qu.: 0.0000   1st Qu.: 94       1st Qu.:2.000   1st Qu.: 94.50
+ Median : 1.0000   Median :115       Median :4.000   Median : 97.00
+ Mean   : 0.8341   Mean   :122       Mean   :3.123   Mean   : 98.76
+ 3rd Qu.: 2.0000   3rd Qu.:150       3rd Qu.:4.000   3rd Qu.:102.40
+ Max.   : 3.0000   Max.   :256       Max.   :4.000   Max.   :120.90
+                   NA's   :41        NA's   :2
+     length          width           height       curb_weight
+ Min.   :141.1   Min.   :60.30   Min.   :47.80   Min.   :1488
+ 1st Qu.:166.3   1st Qu.:64.10   1st Qu.:52.00   1st Qu.:2145
+ Median :173.2   Median :65.50   Median :54.10   Median :2414
+ Mean   :174.0   Mean   :65.91   Mean   :53.72   Mean   :2556
+ 3rd Qu.:183.1   3rd Qu.:66.90   3rd Qu.:55.50   3rd Qu.:2935
+ Max.   :208.1   Max.   :72.30   Max.   :59.80   Max.   :4066
+
+ num_of_cylinders  engine_size         bore          stroke
+ Min.   : 2.00    Min.   : 61.0   Min.   :2.54   Min.   :2.070
+ 1st Qu.: 4.00    1st Qu.: 97.0   1st Qu.:3.15   1st Qu.:3.110
+ Median : 4.00    Median :120.0   Median :3.31   Median :3.290
+ Mean   : 4.38    Mean   :126.9   Mean   :3.33   Mean   :3.255
+ 3rd Qu.: 4.00    3rd Qu.:141.0   3rd Qu.:3.59   3rd Qu.:3.410
+ Max.   :12.00    Max.   :326.0   Max.   :3.94   Max.   :4.170
+                                  NA's   :4      NA's   :4
+ compression_ratio   horsepower       peak_rpm       city_mpg
+ Min.   : 7.00     Min.   : 48.0   Min.   :4150   Min.   :13.00
+ 1st Qu.: 8.60     1st Qu.: 70.0   1st Qu.:4800   1st Qu.:19.00
+ Median : 9.00     Median : 95.0   Median :5200   Median :24.00
+ Mean   :10.14     Mean   :104.3   Mean   :5125   Mean   :25.22
+ 3rd Qu.: 9.40     3rd Qu.:116.0   3rd Qu.:5500   3rd Qu.:30.00
+ Max.   :23.00     Max.   :288.0   Max.   :6600   Max.   :49.00
+                   NA's   :2       NA's   :2
+  highway_mpg        price
+ Min.   :16.00   Min.   : 5118
+ 1st Qu.:25.00   1st Qu.: 7775
+ Median :30.00   Median :10295
+ Mean   :30.75   Mean   :13207
+ 3rd Qu.:34.00   3rd Qu.:16500
+ Max.   :54.00   Max.   :45400
+                 NA's   :4
+\end{lstlisting}
+
+Questions:
+\begin{enumerate}
+
+\end{enumerate}
+
+\newpage
+% --------------------------------------------------
+% Graphic
+% --------------------------------------------------
+
+\end{document}
