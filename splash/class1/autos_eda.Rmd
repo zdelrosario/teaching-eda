@@ -1,0 +1,119 @@
+---
+title: "autos analysis"
+author: "Zach"
+date: 2018-12-02
+output:
+  github_document:
+  toc: true
+---
+
+The following is a collaborative analysis of the UCI `autos` dataset.
+
+```{r setup, echo=FALSE, warning=FALSE}
+library(tidyverse)
+library(GGally)
+
+## Data filename
+file_name <- "~/Sync/data/autos/imports-85.data"
+## Variable names from the UCI site
+var_names <-
+  c(
+    "symboling",          # Actuarial risk adjustment: -3 Safest, +3 Riskiest
+    "normalized_losses",  # Average insurance loss, averaged over body_style
+    "make",               # Manufacturer
+    "fuel_type",          # Gas or diesel
+    "aspiration",         # Standard or turbo
+    "num_of_doors",       #
+    "body_style",         # hardtop, wagon, sedan, hatchback, convertible
+    "drive_wheels",       # Front, rear, all
+    "engine_location",    # Front, rear
+    "wheel_base",         # Distance between front & rear wheels
+    "length",             #
+    "width",              #
+    "height",             #
+    "curb_weight",        # Weight w/o cargo
+    "engine_type",        # Engine layout
+    "num_of_cylinders",   #
+    "engine_size",        # Total engine displacement
+    "fuel_system",        # Fuel feed system
+    "bore",               # Cylinder diameter
+    "stroke",             # Cylinder displacement distance
+    "compression_ratio",  # Swept volume compression ratio
+    "horsepower",         # Engine power
+    "peak_rpm",           # Peak rotations per minute (redline?)
+    "city_mpg",           # City fuel efficiency
+    "highway_mpg",        # Highway fuel efficiency
+    "price"               # MSRP
+  )
+
+## Helper functions
+## --------------------------------------------------
+parse_numchar <- function(x) {
+  case_when(
+        x == "two" ~ 2L,
+        x == "three" ~ 3L,
+        x == "four" ~ 4L,
+        x == "five" ~ 5L,
+        x == "six" ~ 6L,
+        x == "seven" ~ 7L,
+        x == "eight" ~ 8L,
+        x == "nine" ~ 9L,
+        x == "ten" ~ 10L,
+        x == "eleven" ~ 11L,
+        x == "twelve" ~ 12L,
+        TRUE ~ NA_integer_
+      )
+}
+```
+
+## Wrangling
+<!-- ------------------------------------------------- -->
+
+Hadley Wickham says that "importing data is 80% boredom and 20% screaming" --
+I've done the screaming here so you don't have to!
+
+The data are essentially in CSV format, though we'll need to do some wrangling.
+
+```{r load_n_wrangle}
+df_raw <-
+  read_csv(
+    file_name,
+    col_names = var_names,
+    col_types = cols(
+      .default = col_number(),
+      symboling = col_integer(),
+      normalized_losses = col_character(),
+      make = col_character(),
+      fuel_type = col_character(),
+      aspiration = col_character(),
+      num_of_doors = col_character(), # Needs manual fix!
+      body_style = col_character(),
+      drive_wheels = col_character(),
+      engine_location = col_character(),
+      engine_type = col_character(),
+      num_of_cylinders = col_character(), # Also needs manual fix!
+      engine_size = col_integer(),
+      fuel_system = col_character()
+    )
+  )
+```
+
+The string-coded numbers are obnoxious; let's map those to integers.
+
+```{r}
+df_raw %>% pull(num_of_doors) %>% unique()
+df_raw %>% pull(num_of_cylinders) %>% unique()
+```
+
+Manual fixes for some of the variables.
+
+```{r}
+df_autos <-
+  df_raw %>%
+  mutate(
+    num_of_doors = parse_numchar(num_of_doors),
+    num_of_cylinders = parse_numchar(num_of_cylinders)
+  )
+```
+
+Finally, we can analyze the data.
