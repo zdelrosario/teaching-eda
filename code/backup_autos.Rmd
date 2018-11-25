@@ -68,6 +68,26 @@ parse_numchar <- function(x) {
         TRUE ~ NA_integer_
       )
 }
+## Common theme settings
+theme_common <- function() {
+  theme_minimal() %+replace%
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
+    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
+
+    aspect.ratio = 4 / 4,
+
+    plot.margin   = unit(c(t = +0, b = +0, r = +1, l = +0), "cm"),
+    panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+
+    legend.text = element_text(size = 10),
+
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90")
+  )
+}
 ```
 
 ## Wrangling
@@ -309,12 +329,18 @@ df_autos %>%
   geom_smooth(aes(y = city_mpg, color = "City")) +
   geom_point(aes(y = highway_mpg, color = "Highway")) +
   geom_point(aes(y = city_mpg, color = "City")) +
-  scale_x_log10() +
+  scale_x_log10(labels = scales::dollar) +
   scale_y_log10() +
+  scale_color_discrete(name = "Type") +
+  theme_common() +
+  theme(
+    legend.position = "bottom"
+  ) +
   labs(
-    x = "Price",
-    y = "Efficiency"
+    x = "Vehicle Sale Price (1985 USD)",
+    y = "Vehicle Efficiency (MPG)"
   )
+ggsave(filename = "../images/mpg_vs_usd.eps")
 ```
 
 More expensive cars are less efficient! You get what you pay for, I suppose....

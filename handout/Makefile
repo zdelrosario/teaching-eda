@@ -1,11 +1,11 @@
 SHELL := /bin/bash
 filename=handout
 
-pdf: 
-	pdflatex ${filename}
+pdf:
+	pdflatex -shell-escape ${filename}
 	bibtex ${filename}||true
-	pdflatex ${filename}
-	pdflatex ${filename}
+	pdflatex -shell-escape ${filename}
+	pdflatex -shell-escape ${filename}
 
 quick:
 	pdflatex ${filename}

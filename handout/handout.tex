@@ -1,5 +1,6 @@
 \documentclass{article}
-\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[top=0.5in, bottom=0.5in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
 \usepackage{listings}
 % Configure listings
 \usepackage{color}
@@ -45,7 +46,15 @@ Please follow the following directions:
 % --------------------------------------------------
 \section{Summary} \label{sec:summary}
 % --------------------------------------------------
-Take a look at the following code output, and answer the following questions:
+Take a look at the following code output, and try to 'get a sense' of the autos
+data. Note that we haven't discussed all the concepts below! Try, to the best of
+your ability, to answer the following questions:
+
+\begin{enumerate}
+\item What do 'Min.', '1st Qu.', 'Median', "Mean", '3rd Qu.', and 'Max.' mean?
+\item Which variable has the most NA's?
+\item For which variables do 'Mean' and 'Median' disagree?
+\end{enumerate}
 
 \begin{lstlisting}
 > df_autos %>% select_if(is.numeric) %>% summary
@@ -91,14 +100,26 @@ Take a look at the following code output, and answer the following questions:
                  NA's   :4
 \end{lstlisting}
 
-Questions:
-\begin{enumerate}
-\item Q
-\end{enumerate}
-
 \newpage
 % --------------------------------------------------
-% Graphic
+\section{Graphic}
 % --------------------------------------------------
+
+Take a look at the following graphic, and answer the following questions:
+
+\begin{enumerate}
+\item What does Figure \ref{fig:mpg-vs-usd} imply about city vs highway driving?
+  Why might this be?
+\item What does Figure \ref{fig:mpg-vs-usd} imply about the relationship between
+  fuel efficiency and price?
+\item Notice that efficiency values tend to form horizontal 'stripes' -- why is
+  this?
+\end{enumerate}
+
+\begin{figure}[!ht]
+  \includegraphics[width=0.90\textwidth]{../images/mpg_vs_usd}
+  \caption{Vehicle efficiency vs price for the UCI autos dataset.}
+  \label{fig:mpg-vs-usd}
+\end{figure}
 
 \end{document}
