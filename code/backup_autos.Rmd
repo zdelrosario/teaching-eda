@@ -344,3 +344,37 @@ ggsave(filename = "../images/mpg_vs_usd.eps")
 ```
 
 More expensive cars are less efficient! You get what you pay for, I suppose....
+But are people *really* paying more for less efficiency, or is there some other
+trend underlying the data?
+
+```{r }
+df_autos %>%
+  ggplot(aes(price, horsepower)) +
+  geom_smooth() +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+Note that horsepower tends to *increase* with price; perhaps people are actually
+paying for increased power rather than increased efficiency.
+
+```{r }
+df_autos %>%
+  ggplot(aes(horsepower)) +
+  geom_smooth(aes(y = highway_mpg, color = "Highway")) +
+  geom_smooth(aes(y = city_mpg, color = "City")) +
+  geom_point(aes(y = highway_mpg, color = "Highway")) +
+  geom_point(aes(y = city_mpg, color = "City")) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(
+    x = "Horsepower",
+    y = "Efficiency"
+  )
+```
+
+Efficiency varies (roughly) inversely with horsepower; the more likely
+relationship between price and efficiency is that people are *generally* more
+willing to pay extra for increased horsepower, and efficiency is necessarily
+decreased with increasing horsepower.
