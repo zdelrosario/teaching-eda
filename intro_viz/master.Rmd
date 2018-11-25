@@ -1,0 +1,315 @@
+---
+title: "Intro to Visualization"
+author: "Zach"
+date: 2018-11-24
+output:
+  github_document:
+    toc: true
+    toc_depth: 6
+---
+
+<!-- solution-begin -->
+The following is a document I use to teach visualization basics.
+<!-- solution-end -->
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r parameters, message = FALSE, warning = FALSE}
+# Libraries
+## --------------------------------------------------
+library(tidyverse)
+
+# Parameters
+## --------------------------------------------------
+## Data filename
+file_name <- "~/Sync/data/autos/imports-85.data"
+## Variable names from the UCI site
+var_names <-
+  c(
+    "symboling",          # Actuarial risk adjustment: -3 Safest, +3 Riskiest
+    "normalized_losses",  # Average insurance loss, averaged over body_style
+    "make",               # Manufacturer
+    "fuel_type",          # Gas or diesel
+    "aspiration",         # Standard or turbo
+    "num_of_doors",       #
+    "body_style",         # hardtop, wagon, sedan, hatchback, convertible
+    "drive_wheels",       # Front, rear, all
+    "engine_location",    # Front, rear
+    "wheel_base",         # Distance between front & rear wheels
+    "length",             #
+    "width",              #
+    "height",             #
+    "curb_weight",        # Weight w/o cargo
+    "engine_type",        # Engine layout
+    "num_of_cylinders",   #
+    "engine_size",        # Total engine displacement
+    "fuel_system",        # Fuel feed system
+    "bore",               # Cylinder diameter
+    "stroke",             # Cylinder displacement distance
+    "compression_ratio",  # Swept volume compression ratio
+    "horsepower",         # Engine power
+    "peak_rpm",           # Peak rotations per minute (redline?)
+    "city_mpg",           # City fuel efficiency
+    "highway_mpg",        # Highway fuel efficiency
+    "price"               # MSRP
+  )
+
+# Parameters
+## --------------------------------------------------
+parse_numchar <- function(x) {
+  case_when(
+        x == "two" ~ 2L,
+        x == "three" ~ 3L,
+        x == "four" ~ 4L,
+        x == "five" ~ 5L,
+        x == "six" ~ 6L,
+        x == "seven" ~ 7L,
+        x == "eight" ~ 8L,
+        x == "nine" ~ 9L,
+        x == "ten" ~ 10L,
+        x == "eleven" ~ 11L,
+        x == "twelve" ~ 12L,
+        TRUE ~ NA_integer_
+      )
+}
+```
+
+## Wrangling
+<!-- ------------------------------------------------- -->
+
+First, we need to load and wrangle the data a bit.
+
+```{r load_n_wrangle}
+df_raw <-
+  read_csv(
+    file_name,
+    col_names = var_names,
+    col_types = cols(
+      .default = col_number(),
+      symboling = col_integer(),
+      normalized_losses = col_integer(),
+      make = col_character(),
+      fuel_type = col_character(),
+      aspiration = col_character(),
+      num_of_doors = col_character(), # Needs manual fix!
+      body_style = col_character(),
+      drive_wheels = col_character(),
+      engine_location = col_character(),
+      engine_type = col_character(),
+      num_of_cylinders = col_character(), # Also needs manual fix!
+      engine_size = col_integer(),
+      fuel_system = col_character()
+    )
+  )
+```
+
+The string-coded numbers are obnoxious; let's map those to integers.
+
+```{r}
+df_raw %>% pull(num_of_doors) %>% unique()
+df_raw %>% pull(num_of_cylinders) %>% unique()
+```
+
+Manual fixes for some of the variables.
+
+```{r}
+df_autos <-
+  df_raw %>%
+  mutate(
+    num_of_doors = parse_numchar(num_of_doors),
+    num_of_cylinders = parse_numchar(num_of_cylinders)
+  )
+```
+
+Finally, we can analyze the data.
+
+## Visualization
+<!-- ------------------------------------------------- -->
+
+Let's work our way through some visualization concepts.
+
+### Bar Graph
+<!-- ------------------------- -->
+
+```{r bar_graph}
+df_autos %>%
+  ggplot(aes(body_style)) +
+  geom_bar()
+```
+
+__q1.1__ What does this plot show?
+
+<!-- solution-begin -->
+This shows the total number of cars in the data, according to their `body_style`.
+<!-- solution-end -->
+
+__q1.2__ Why are there five bars?
+
+<!-- solution-begin -->
+There are five kinds of `body_style` that appear in the data; they are `r df_autos %>% pull(body_style) %>% unique`.
+<!-- solution-end -->
+
+__q1.3__ Could we plot `length` this way?
+
+<!-- solution-begin -->
+No; there are too many different values of `length` in the data. We would need to use a different strategy
+to plot `length` in this fashion.
+<!-- solution-end -->
+
+### Histograms
+<!-- ------------------------- -->
+
+```{r hist}
+df_autos %>% 
+  ggplot(aes(length)) +
+  geom_histogram(bins = 25)
+```
+
+__q1.1__ What does this plot show?
+
+<!-- solution-begin -->
+This shows the number of cars in the data landing in particular 'bins' of `length`. Above,
+we have chosen to chop the range of values of `length` up into `25` equal-spaced bins,
+and plot the number of cars in each bin much like the bar graph above.
+<!-- solution-end -->
+
+__q2.2__ How does this plot differ from the bar graph above?
+
+<!-- solution-begin -->
+The bar graph plotted a discrete quantity, while the histogram plots a continuous variable.
+The bar graph directly reports counts for each of its possible values, while the histogram
+first creates an approximation of the continuous data.
+<!-- solution-end -->
+
+__q2.3__ What choice do we need to make when creating a histogram?
+
+<!-- solution-begin -->
+We must choose the bins. We can do this by making them equally spaced and choosing a length or
+number of bins. We could also choose unequally-spaced bins.
+
+The Cardinal Rule of Histograms: Play with the bin spacing. Make sure to try several values
+of `bins` when first exploring a dataset; certain patterns only appear at particular bin
+spacings. 
+<!-- solution-end -->
+
+### Pair plots
+<!-- ------------------------- -->
+
+__q3.1__ Make a prediction: How does `length` vary with `body_style`?
+
+```{r length_v_body_style}
+df_autos %>% 
+  ggplot(aes(body_style, length)) +
+  geom_point()
+```
+
+__q3.2__ What `body_style` tends to have the shortest car?
+
+<!-- solution-begin -->
+Hatchbacks have the smallest vehicles in the data
+<!-- solution-end -->
+
+```{r length_v_body_style}
+df_autos %>% 
+  ggplot(aes(body_style, length)) +
+  geom_boxplot()
+```
+
+__q3.3__ What does this plot show?
+
+<!-- solution-begin -->
+This is a *boxplot*, a visual summary invented by American statistician John Tukey. It gives a measure
+of the 'center' of the data (the median) as a horizontal line, two measures of the 'spread' of the
+data as the white boxes and the vertical 'whiskers', and shows outliers as solid dots.
+
+This visualization shows that wagons tend to be the longest (in terms of median), but sedans do have
+longer models.
+<!-- solution-end -->
+
+### Beyond pairs
+<!-- ------------------------- -->
+
+```{r three}
+df_autos %>% 
+  ggplot(aes(body_style, length, color = as.factor(num_of_doors))) +
+  geom_point() +
+  theme(legend.position = "bottom")
+```
+
+__q4.1__ How many variables can we see in the plot above?
+
+<!-- solution-begin -->
+Three
+<!-- solution-end -->
+
+__q4.2__ How does `num_of_doors` vary with `body_style`?
+
+<!-- solution-begin -->
+All the convertibles and hardtops are two-door; hatchbacks and sedans are a (skewed) mix,
+and all our wagons are four-door.
+<!-- solution-end -->
+
+__q4.3__ What does `NA` mean?
+
+<!-- solution-begin -->
+`NA` means 'not available'; this piece of data is missing! This illustrates an important point:
+Data can have errors!
+<!-- solution-end -->
+
+```{r three2}
+df_autos %>% 
+  ggplot(aes(fuel_type, body_style)) +
+  geom_point(aes(color = compression_ratio))
+```
+
+__q4.4__ Is this a good visualization?
+
+<!-- solution-begin -->
+This is a terrible visualization! Here are a few reasons why:
+
+1. Overplotting: There are multiple points overlapping on the same position. It's impossible
+   to tell this from the visualization above. A solution is to 'jitter' the data.
+2. Use of color: Color is one of the least-effective ways to convey information. We could
+   plot `compression_ratio` against one of the axes instead, and it would be far more
+   effective.
+3. Orientation: Generally, we have more space along a horizontal axis than a vertical
+   one. We could put `body_style` along the horizontal axis for a more effective use
+   of space. (This is a relatively minor point.)
+<!-- solution-end -->
+
+__q4.4__ Improve this visualization of `compression_ratio`, `body_style`, and `fuel_type`.
+
+<!-- solution-begin -->
+Here's my improved graph. From this, we can see the striking difference between diesel and gas engines;
+diesel engines use a 'compression ignition' approach to combustion, while gas engines use spark plugs.
+By design, diesel engines tend to have a higher compression ratio, in order to ignite the fuel.
+
+```{r three3}
+df_autos %>% 
+  ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
+  geom_point() +
+  theme(legend.position = "bottom")
+```
+<!-- solution-end -->
+
+<!-- solution-begin -->
+### Visual hierarchy
+<!-- ------------------------- -->
+
+Here's some bonus material:
+
+There is a hierarchy of perceptual tasks, ranked in terms of our ability to
+distinguish features and make comparisons. To maximize readability of a graph,
+one should use the highest-ranked tasks to display the most relevant features of
+the data.
+
+1. Position along a common scale
+2. Position on identical but nonaligned scale
+3. Length
+4. Angle or slope
+5. Area
+6. Volume or Density or Color saturation
+7. Color hue
+<!-- solution-end -->
