@@ -1,3 +1,68 @@
 * My questions
 - How to do `floating around' well?
 - Timing / sequencing?
+
+* 2018-11-30 Test session
+
+** Big picture
+
+
+** Immediate
+- 9th graders don't know about cars!
+  + Seconded!
+  - Negated!
+  + Find more accessible data
+- OR Give a picture of the car
+
+- Correlation and causation example good
+  + Umbrellas and rain (have a simpler explanation as well)
+
+- "Laying a foundation"
+  + Frame the kinds of questions we might like to answer
+  + Set the context for wanting to look at data
+
+- Don't call out code you don't emphasize
+
+- Perhaps comment lines you intend to use
+- Coding errors can look like incompetence
+  + Prime the audience: "You're going to see me mess up here"
+  + State norms of the class at the beginning
+
+- "It felt like it was 'black-boxy'"
+  + Transitions: e.g. points to boxplots (I've summarized the data)
+    - 'Translate' the code into conceptual stuff
+  + Code comments maybe?
+  + Explain the setup at the beginning
+  + Don't jitter the data
+  + I didn't follow up on boxplots!!!!!1!!!1
+  + Show some dots before jumping to pair plots
+
+- Keep the energy and positivity
+
+- Zoom the text, but not the plots
+- Pick better
+- Too fast at the beginning
+- Too much "guess what I'm thinking"
+  + Ask the same question multiple times: "What do you see"? Better chance of
+    getting the 'desired' answer?
+
+- Generate data from the students
+  + Ask students their height, build a histogram live; gets at 'individual data points'
+
+Handout:
+- Summary question
+  + Flip Questions 2 & 3
+  + Q1 "Wha
+  + This section not related to your learning objectives!
+    - Maybe just take this out, due to time constraints
+    - Maybe keep this for a longer version of the class
+  + For NA's, sometimes they're just hard to measure; or errors
+- Graphic
+  + Modify the viz intro to just support this graphic
+
+- Maybe lose the histograms?
+- "I like bad vs good visualizations"
+
+** Other (more accessible) Data
+- body measurements dataset?
+- countries
