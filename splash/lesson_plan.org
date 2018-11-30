@@ -1,0 +1,29 @@
+Splash timeslot: 45 minutes
+
+* Intro Viz
+- Work through challenge document with LBT (10 minutes)
+
+* Handout
+- Students read directions, work on `Summary' by themselves (5 minutes)
+- Student groups work on `Summary' and `Graphic' together (10 minutes)
+- Full group discusses all questions (5 minutes)
+
+* Live EDA
+- Live EDA (10 minutes)
+  + Explore "Efficiency vs Price" relationship
+  + Where do these cars come from? (They're imports)
+
+* Q&A
+- Answer remaining Q's (5 minutes)
+
+* Timeline
+
+| Intro viz       | 10 |
+| Handout: Solo   |  5 |
+| Handout: Groups | 10 |
+| Handout: Class  |  5 |
+| Live EDA        | 10 |
+| Q&A             |  5 |
+|-----------------+----|
+| Total           | 45 |
+#+TBLFM: @7$2=vsum(@1$2..@6$2)

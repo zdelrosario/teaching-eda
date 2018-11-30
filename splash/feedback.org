@@ -1,0 +1,3 @@
+* My questions
+- How to do `floating around' well?
+- Timing / sequencing?
