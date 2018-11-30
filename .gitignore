@@ -2,3 +2,7 @@
 \#*\#
 
 *.pdf
+*.aux
+*.bbl
+*.blg
+*.log
