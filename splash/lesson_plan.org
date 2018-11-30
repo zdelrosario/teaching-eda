@@ -1,5 +1,17 @@
 Splash timeslot: 45 minutes
 
+* Classroom Setting
+- Before class:
+  1. "Print your name on an index card"
+  2. "Fill out a name tent"
+  3. "Discuss with your table: When have you encountered data in your own life?"
+
+- Today's menu:
+  1. Intro viz
+  2. Handout
+  3. Live EDA
+  4. Q&A (?)
+
 * Intro Viz
 - Work through challenge document with LBT (10 minutes)
 
