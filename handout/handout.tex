@@ -29,6 +29,14 @@
   deletekeywords={c, length}% remove keywords
 }
 
+% Markerless footnote
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
 \begin{document}
 
 % --------------------------------------------------
@@ -41,17 +49,21 @@
 \item When prompted, join in the full-group discussion
 \end{enumerate}
 
+\blfootnote{This, and all class materials, are available at
+  https://github.com/zdelrosario/teaching-eda}
+
 % --------------------------------------------------
 \section{Summary} \label{sec:summary}
 % --------------------------------------------------
-Take a look at the following code output, and try to 'get a sense' of the autos
+Take a look at the following code output, and try to `get a sense' of the autos
 data. Note that we haven't discussed all the concepts below! Try, to the best of
 your ability, to answer the following questions:
 
 \begin{enumerate}
-\item What do 'Min.', '1st Qu.', 'Median', "Mean", '3rd Qu.', and 'Max.' mean?
-\item Which variable has the most NA's?
-\item For which variables do 'Mean' and 'Median' \emph{significantly} disagree?
+\item What do `Min.', `1st Qu.', `Median', `Mean', `3rd Qu.', and `Max.' tell
+  you about the data?
+\item Which variable has the most NA's? Why might this be?
+\item For which variables do `Mean' and `Median' \emph{significantly} disagree?
 \end{enumerate}
 
 \begin{lstlisting}
@@ -99,6 +111,8 @@ your ability, to answer the following questions:
 \end{lstlisting}
 
 \newpage
+\blfootnote{This, and all class materials, are available at
+  https://github.com/zdelrosario/teaching-eda}
 % --------------------------------------------------
 \section{Graphic}
 % --------------------------------------------------
@@ -110,7 +124,7 @@ Take a look at the following graphic, and answer the following questions:
   Why might this be?
 \item What does Figure \ref{fig:mpg-vs-usd} imply about the relationship between
   vehicle efficiency and price?
-\item Notice that efficiency values tend to form horizontal 'stripes' -- why is
+\item Notice that efficiency values tend to form horizontal `stripes' -- why is
   this?
 \end{enumerate}
 

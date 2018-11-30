@@ -222,13 +222,19 @@ __q3.2__ What `body_style` tends to have the shortest car?
 Hatchbacks have the smallest vehicles in the data
 <!-- solution-end -->
 
+__q3.3__ Can you tell which `body_style` tends to have the longest car?
+
+<!-- solution-begin -->
+This is a little difficult to do from the plot above.
+<!-- solution-end -->
+
 ```{r length_v_body_style}
 df_autos %>% 
   ggplot(aes(body_style, length)) +
   geom_boxplot()
 ```
 
-__q3.3__ What does this plot show?
+__q3.4__ What does this plot show?
 
 <!-- solution-begin -->
 This is a *boxplot*, a visual summary invented by American statistician John Tukey. It gives a measure
@@ -252,7 +258,7 @@ df_autos %>%
 __q4.1__ How many variables can we see in the plot above?
 
 <!-- solution-begin -->
-Three
+Three; they are `length`, `body_style`, and `num_of_doors`.
 <!-- solution-end -->
 
 __q4.2__ How does `num_of_doors` vary with `body_style`?
@@ -275,7 +281,7 @@ df_autos %>%
   geom_point(aes(color = compression_ratio))
 ```
 
-__q4.4__ Is this a good visualization?
+__q4.4__ Is this a good visualization? Why or why not?
 
 <!-- solution-begin -->
 This is a terrible visualization! Here are a few reasons why:
