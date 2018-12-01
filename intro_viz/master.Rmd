@@ -163,82 +163,48 @@ df_autos %>% head
 
 It's hard to tell what's going on from this! We're going to *visualize* the data to help us understand what's going on.
 
-### Bar Graph
+### Single plots
 <!-- ------------------------- -->
 
-```{r bar_graph}
-df_autos %>%
+```{r}
+df_autos %>% 
+  ggplot(aes(body_style, id)) +
+  geom_point() +
+  theme_common() +
+  labs(
+    y = "Car identifier index"
+  )
+```
+
+__q1.1__ What do the 'dots' here represent?
+
+<!-- solution-begin -->
+Each 'dot' represents an individual car. They are organized by `body_style`, and their `id` in the dataset.
+<!-- solution-end -->
+
+__q1.2__ Which `body_style` do we have the most data on?
+
+<!-- solution-begin -->
+Maybe hatchbacks or sedans? It's a little difficult to tell from the figure above.
+<!-- solution-end -->
+
+```{r}
+df_autos %>% 
   ggplot(aes(body_style)) +
   geom_bar() +
   theme_common()
 ```
 
-__q1.1__ What does this plot show?
+__q1.3__ What does this plot show?
 
 <!-- solution-begin -->
-This shows the total number of cars in the data, according to their `body_style`.
+This shows the total number of cars within each `body_style`.
 <!-- solution-end -->
 
-__q1.2__ Why are there five bars?
+__q1.4__ Is this easier or harder to read than the previous plot?
 
 <!-- solution-begin -->
-There are five kinds of `body_style` that appear in the data; they are `r df_autos %>% pull(body_style) %>% unique`.
-<!-- solution-end -->
-
-__q1.3__ Would would happen if we tried plotting `length` this way?
-
-<!-- solution-begin -->
-Let's try it!
-
-```{r bar_length}
-df_autos %>% 
-  ggplot(aes(length)) +
-  geom_bar() +
-  theme_common()
-```
-
-There are *many* different values of `length` in the data. It's very challenging to tell what's going
-on based on this figure. Perhaps a different strategy will work better....
-<!-- solution-end -->
-
-### Histograms
-<!-- ------------------------- -->
-
-```{r hist}
-df_autos %>% 
-  ggplot(aes(length)) +
-  geom_histogram(bins = 25) +
-  theme_common()
-```
-
-__q2.1__ What does this plot show?
-
-<!-- solution-begin -->
-This shows the number of cars in the data landing in particular 'bins' of `length`. Above,
-we have chosen to chop the range of values of `length` up into `25` equal-spaced bins,
-and plot the number of cars in each bin much like the bar graph above.
-
-We can see that many of the cars are about `175` inches in length; though there are a fair number
-just below `160` and around `190`.
-<!-- solution-end -->
-
-__q2.2__ How does this plot differ from the bar graph above?
-
-<!-- solution-begin -->
-The bar graph plotted a discrete quantity, while the histogram plots a continuous variable.
-The bar graph directly reports counts for each of its possible values, while the histogram
-first creates an approximation of the continuous data.
-<!-- solution-end -->
-
-__q2.3__ What choice do we need to make when creating a histogram?
-
-<!-- solution-begin -->
-We must choose the bins. We can do this by making them equally spaced and choosing a length or
-number of bins. We could also choose unequally-spaced bins.
-
-The Cardinal Rule of Histograms: Play with the bin spacing. Make sure to try several values
-of `bins` when first exploring a dataset; certain patterns only appear at particular bin
-spacings. 
+I *claim* that this is easier to read.
 <!-- solution-end -->
 
 ### Pair plots
@@ -251,15 +217,19 @@ df_autos %>%
   theme_common()
 ```
 
-__q3.1__ What do the 'dots' in this plot represent?
+__q2.1__ What does this plot show us?
 
-__q3.2__ What `body_style` tends to have the shortest car?
+<!-- solution-begin -->
+The `length` of individual cars, organized by their `body_style`.
+<!-- solution-end -->
+
+__q2.2__ What `body_style` tends to have the shortest car?
 
 <!-- solution-begin -->
 Hatchbacks have the smallest vehicles in the data
 <!-- solution-end -->
 
-__q3.3__ Can you tell which `body_style` tends to have the longest car?
+__q2.3__ Can you tell which `body_style` has the largest car, on average?
 
 <!-- solution-begin -->
 This is a little difficult to do from the plot above.
@@ -267,20 +237,23 @@ This is a little difficult to do from the plot above.
 
 ```{r length_v_body_style}
 df_autos %>% 
+  group_by(body_style) %>% 
+  mutate(mean_len = mean(length, na.rm = F)) %>% 
+  ungroup() %>% 
   ggplot(aes(body_style, length)) +
-  geom_boxplot() +
+  geom_point(aes(color = "Individual")) +
+  geom_point(
+    data = . %>% select(body_style, mean_len) %>% unique,
+    mapping = aes(y = mean_len, color = "Average"), 
+    size = 4, 
+    alpha = 1 / 2
+  ) +
+  scale_color_discrete(name = NULL) +
   theme_common()
 ```
 
-__q3.4__ What does this plot show?
-
 <!-- solution-begin -->
-This is a *boxplot*, a visual summary invented by American statistician John Tukey. It gives a measure
-of the 'center' of the data (the median) as a horizontal line, two measures of the 'spread' of the
-data as the white boxes and the vertical 'whiskers', and shows outliers as solid dots.
-
-This visualization shows that wagons tend to be the longest (in terms of median), but sedans do have
-longer models.
+Punchline: Sometimes, summarizing the data can help us see underlying patterns.
 <!-- solution-end -->
 
 ### Beyond pairs
@@ -294,20 +267,20 @@ df_autos %>%
   theme(legend.position = "bottom")
 ```
 
-__q4.1__ How many variables can we see in the plot above?
+__q3.1__ How many variables can we see in the plot above?
 
 <!-- solution-begin -->
 Three; they are `length`, `body_style`, and `num_of_doors`.
 <!-- solution-end -->
 
-__q4.2__ How does `num_of_doors` vary with `body_style`?
+__q3.2__ How does `num_of_doors` vary with `body_style`?
 
 <!-- solution-begin -->
 All the convertibles and hardtops are two-door; hatchbacks and sedans are a (skewed) mix,
 and all our wagons are four-door.
 <!-- solution-end -->
 
-__q4.3__ What does `NA` mean?
+__q3.3__ What does `NA` mean?
 
 <!-- solution-begin -->
 `NA` means 'not available'; this piece of data is missing! This illustrates an important point:
@@ -321,7 +294,7 @@ df_autos %>%
   theme_common()
 ```
 
-__q4.4__ Is this a good visualization? Why or why not?
+__q3.4__ Is this a good visualization? Why or why not?
 
 <!-- solution-begin -->
 This is a terrible visualization! Here are a few reasons why:
@@ -336,7 +309,7 @@ This is a terrible visualization! Here are a few reasons why:
    of space. (This is a relatively minor point.)
 <!-- solution-end -->
 
-__q4.4__ Improve this visualization of `compression_ratio`, `body_style`, and `fuel_type`.
+__q3.4__ Improve this visualization of `compression_ratio`, `body_style`, and `fuel_type`.
 
 <!-- solution-begin -->
 Here's my improved graph. From this, we can see the striking difference between diesel and gas engines;
