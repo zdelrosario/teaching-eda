@@ -12,6 +12,9 @@ output:
 The following is a document I use to teach visualization basics.
 <!-- solution-end -->
 
+## Setup
+(Keep this folded!)
+
 ```{r include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -74,14 +77,32 @@ parse_numchar <- function(x) {
         TRUE ~ NA_integer_
       )
 }
+## Common theme settings
+theme_common <- function() {
+  theme_minimal() %+replace%
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
+    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
+
+    aspect.ratio = 3 / 4,
+
+    plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+    panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+
+    legend.text = element_text(size = 10),
+
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90")
+  )
+}
 ```
 
-## Wrangling
-<!-- ------------------------------------------------- -->
 
 First, we need to load and wrangle the data a bit.
 
-```{r load_n_wrangle}
+```{r load_n_wrangle, warning=FALSE, message=FALSE}
 df_raw <-
   read_csv(
     file_name,
@@ -128,7 +149,19 @@ Finally, we can analyze the data.
 ## Visualization
 <!-- ------------------------------------------------- -->
 
-Let's work our way through some visualization concepts.
+I've got some data on automobiles. Here are the car facts we've got:
+
+```{r}
+df_autos %>% names
+```
+
+Here's a quick look at some of the data.
+
+```{r}
+df_autos %>% head
+```
+
+It's hard to tell what's going on from this! We're going to *visualize* the data to help us understand what's going on.
 
 ### Bar Graph
 <!-- ------------------------- -->
@@ -136,7 +169,8 @@ Let's work our way through some visualization concepts.
 ```{r bar_graph}
 df_autos %>%
   ggplot(aes(body_style)) +
-  geom_bar()
+  geom_bar() +
+  theme_common()
 ```
 
 __q1.1__ What does this plot show?
@@ -159,7 +193,8 @@ Let's try it!
 ```{r bar_length}
 df_autos %>% 
   ggplot(aes(length)) +
-  geom_bar()
+  geom_bar() +
+  theme_common()
 ```
 
 There are *many* different values of `length` in the data. It's very challenging to tell what's going
@@ -172,10 +207,11 @@ on based on this figure. Perhaps a different strategy will work better....
 ```{r hist}
 df_autos %>% 
   ggplot(aes(length)) +
-  geom_histogram(bins = 25)
+  geom_histogram(bins = 25) +
+  theme_common()
 ```
 
-__q1.1__ What does this plot show?
+__q2.1__ What does this plot show?
 
 <!-- solution-begin -->
 This shows the number of cars in the data landing in particular 'bins' of `length`. Above,
@@ -208,13 +244,14 @@ spacings.
 ### Pair plots
 <!-- ------------------------- -->
 
-__q3.1__ Make a prediction: How does `length` vary with `body_style`?
-
 ```{r length_v_body_style}
 df_autos %>% 
   ggplot(aes(body_style, length)) +
-  geom_point()
+  geom_point() +
+  theme_common()
 ```
+
+__q3.1__ What do the 'dots' in this plot represent?
 
 __q3.2__ What `body_style` tends to have the shortest car?
 
@@ -231,7 +268,8 @@ This is a little difficult to do from the plot above.
 ```{r length_v_body_style}
 df_autos %>% 
   ggplot(aes(body_style, length)) +
-  geom_boxplot()
+  geom_boxplot() +
+  theme_common()
 ```
 
 __q3.4__ What does this plot show?
@@ -252,6 +290,7 @@ longer models.
 df_autos %>% 
   ggplot(aes(body_style, length, color = as.factor(num_of_doors))) +
   geom_point() +
+  theme_common() +
   theme(legend.position = "bottom")
 ```
 
@@ -278,7 +317,8 @@ Data can have errors!
 ```{r three2}
 df_autos %>% 
   ggplot(aes(fuel_type, body_style)) +
-  geom_point(aes(color = compression_ratio))
+  geom_point(aes(color = compression_ratio)) +
+  theme_common()
 ```
 
 __q4.4__ Is this a good visualization? Why or why not?
@@ -307,6 +347,7 @@ By design, diesel engines tend to have a higher compression ratio, in order to i
 df_autos %>% 
   ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
   geom_point() +
+  theme_common() +
   theme(legend.position = "bottom")
 ```
 <!-- solution-end -->
