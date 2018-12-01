@@ -325,12 +325,12 @@ There's one last thing to note in these data:
 ```{r}
 df_autos %>%
   ggplot(aes(price)) +
-  geom_smooth(aes(y = highway_mpg, color = "Highway")) +
-  geom_smooth(aes(y = city_mpg, color = "City")) +
+  geom_smooth(aes(y = highway_mpg, color = "Highway"), se = F) +
+  geom_smooth(aes(y = city_mpg, color = "City"), se = F) +
   geom_point(aes(y = highway_mpg, color = "Highway")) +
   geom_point(aes(y = city_mpg, color = "City")) +
-  scale_x_log10(labels = scales::dollar) +
-  scale_y_log10() +
+  scale_x_log10(labels = scales::dollar, breaks = c(5e3, 1e4, 2e4, 4e4)) +
+  scale_y_log10(breaks = c(10, 20, 40)) +
   scale_color_discrete(name = "Type") +
   theme_common() +
   theme(
@@ -338,7 +338,7 @@ df_autos %>%
   ) +
   labs(
     x = "Vehicle Sale Price (1985 USD)",
-    y = "Vehicle Efficiency (MPG)"
+    y = "Fuel Efficiency (MPG)"
   )
 ggsave(filename = "../images/mpg_vs_usd.eps")
 ```
