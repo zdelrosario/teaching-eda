@@ -99,7 +99,6 @@ theme_common <- function() {
 }
 ```
 
-
 First, we need to load and wrangle the data a bit.
 
 ```{r load_n_wrangle, warning=FALSE, message=FALSE}
@@ -141,7 +140,8 @@ df_autos <-
   mutate(
     num_of_doors = parse_numchar(num_of_doors),
     num_of_cylinders = parse_numchar(num_of_cylinders)
-  )
+  ) %>%
+  rowid_to_column(var = "id")
 ```
 
 Finally, we can analyze the data.
@@ -149,7 +149,7 @@ Finally, we can analyze the data.
 ## Visualization
 <!-- ------------------------------------------------- -->
 
-I've got some data on automobiles. Here are the car facts we've got:
+I've got some data (from UCI) on automobiles. Here are the car facts we've got:
 
 ```{r}
 df_autos %>% names
@@ -167,7 +167,7 @@ It's hard to tell what's going on from this! We're going to *visualize* the data
 <!-- ------------------------- -->
 
 ```{r}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(body_style, id)) +
   geom_point() +
   theme_common() +
@@ -189,7 +189,7 @@ Maybe hatchbacks or sedans? It's a little difficult to tell from the figure abov
 <!-- solution-end -->
 
 ```{r}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(body_style)) +
   geom_bar() +
   theme_common()
@@ -211,7 +211,7 @@ I *claim* that this is easier to read.
 <!-- ------------------------- -->
 
 ```{r length_v_body_style}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(body_style, length)) +
   geom_point() +
   theme_common()
@@ -236,20 +236,21 @@ This is a little difficult to do from the plot above.
 <!-- solution-end -->
 
 ```{r length_v_body_style}
-df_autos %>% 
-  group_by(body_style) %>% 
-  mutate(mean_len = mean(length, na.rm = F)) %>% 
-  ungroup() %>% 
+df_autos %>%
+  group_by(body_style) %>%
+  mutate(mean_len = mean(length, na.rm = F)) %>%
+  ungroup() %>%
   ggplot(aes(body_style, length)) +
   geom_point(aes(color = "Individual")) +
   geom_point(
     data = . %>% select(body_style, mean_len) %>% unique,
-    mapping = aes(y = mean_len, color = "Average"), 
-    size = 4, 
+    mapping = aes(y = mean_len, color = "Average"),
+    size = 4,
     alpha = 1 / 2
   ) +
   scale_color_discrete(name = NULL) +
-  theme_common()
+  theme_common() +
+  theme(legend.position = "bottom")
 ```
 
 <!-- solution-begin -->
@@ -260,7 +261,7 @@ Punchline: Sometimes, summarizing the data can help us see underlying patterns.
 <!-- ------------------------- -->
 
 ```{r three}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(body_style, length, color = as.factor(num_of_doors))) +
   geom_point() +
   theme_common() +
@@ -288,7 +289,7 @@ Data can have errors!
 <!-- solution-end -->
 
 ```{r three2}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(fuel_type, body_style)) +
   geom_point(aes(color = compression_ratio)) +
   theme_common()
@@ -317,7 +318,7 @@ diesel engines use a 'compression ignition' approach to combustion, while gas en
 By design, diesel engines tend to have a higher compression ratio, in order to ignite the fuel.
 
 ```{r three3}
-df_autos %>% 
+df_autos %>%
   ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
   geom_point() +
   theme_common() +
@@ -328,7 +329,6 @@ df_autos %>%
 <!-- solution-begin -->
 ### Visual hierarchy
 <!-- ------------------------- -->
-
 Here's some bonus material:
 
 There is a hierarchy of perceptual tasks, ranked in terms of our ability to
