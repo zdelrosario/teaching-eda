@@ -82,7 +82,7 @@ df_raw <-
     col_types = cols(
       .default = col_number(),
       symboling = col_integer(),
-      normalized_losses = col_integer(),
+      normalized_losses = col_character(),
       make = col_character(),
       fuel_type = col_character(),
       aspiration = col_character(),
@@ -117,3 +117,69 @@ df_autos <-
 ```
 
 Finally, we can analyze the data.
+
+## Correlation not Causation
+<!-- ------------------------------------------------- -->
+
+There's an important lesson we need to learn: "Correlation does *not
+necessarily* imply causation". This is best done by way of example.
+
+```{r mpg_vs_price}
+df_autos %>%
+  ggplot(aes(price)) +
+  geom_smooth(aes(y = highway_mpg, color = "Highway"), se = F) +
+  geom_smooth(aes(y = city_mpg, color = "City"), se = F) +
+  geom_point(aes(y = highway_mpg, color = "Highway")) +
+  geom_point(aes(y = city_mpg, color = "City")) +
+  scale_x_log10(labels = scales::dollar, breaks = c(5e3, 1e4, 2e4, 4e4)) +
+  scale_y_log10(breaks = c(10, 20, 40)) +
+  scale_color_discrete(name = "Type") +
+  theme_common() +
+  theme(
+    legend.position = "bottom"
+  ) +
+  labs(
+    x = "Vehicle Sale Price (1985 USD)",
+    y = "Fuel Efficiency (MPG)"
+  )
+```
+
+It looks like people were paying more for less efficiency in 1985! Is this true?
+
+```{r hp_vs_price}
+df_autos %>%
+  ggplot(aes(price, horsepower)) +
+  geom_smooth(se = F) +
+  geom_point() +
+  scale_x_log10(labels = scales::dollar, breaks = c(5e3, 1e4, 2e4, 4e4)) +
+  scale_y_log10() +
+  theme_common() +
+  labs(
+    x = "Vehicle Sale Price (1985 USD)",
+    y = "Engine Power (HP)"
+  )
+```
+
+We can also see that people were paying more for increased horsepower....
+
+```{r mpg_vs_hp}
+df_autos %>%
+  ggplot(aes(horsepower)) +
+  geom_smooth(aes(y = highway_mpg, color = "Highway"), se = F) +
+  geom_smooth(aes(y = city_mpg, color = "City"), se = F) +
+  geom_point(aes(y = highway_mpg, color = "Highway")) +
+  geom_point(aes(y = city_mpg, color = "City")) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(
+    x = "Engine Power (HP)",
+    y = "Fuel Efficiency (MPG)"
+  ) +
+  theme_common() +
+  theme(legend.position = "bottom")
+```
+
+... and increased horsepower means decreased fuel efficiency.
+
+## Live EDA
+<!-- ------------------------------------------------- -->
