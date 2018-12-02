@@ -66,3 +66,51 @@ Handout:
 ** Other (more accessible) Data
 - body measurements dataset?
 - countries
+* 2018-12-02 Splash
+** Session 1
+- Students only briefly discussed the whiteboard question, then went to sitting
+  quietly on their phones
+- Students seemed to read the handout in far less than 5 minutes
+- I noticed a lot of students raising their hand; I elected to ignore those
+  when using LBT
+  + Not yet sure what my protocol should be....
+- In the Q&A, no students engaged in Live EDA, and instead just asked questions
+  about data science
+  + This is fine, but it raises a question in my mind on how to transition to a
+    more student-driven form of LBT, rather that moving through a set
+    curriculum.
+- I started about 5 minutes late to wait for stragglers, and ended with about 5
+  minutes until the hour
+
+** Session 2
+- Students only briefly discussed the whiteboard question, then went to sitting
+  quietly on their phones
+- I primed the handout with a 2-3 minute expectation, and played it by ear
+- Students in the back of the room had a hard time reading the graphs
+- I found that the "improve this graph" question was easier for students when I
+  phrased it as "suggest two variables to swap" (more scaffolding)
+- I got students to buy into the idea of Live EDA by asking for pairs of
+  variables; the end of class was rather engaged in the idea
+
+** Session 3
+- Students only briefly discussed the whiteboard question, then went to sitting
+  quietly on their phones
+  + Maybe it's inherently difficult to get younger students (who are strangers)
+    to talk to each other?
+- The "swap two variables" tweak made the "improve this graph" example run a lot
+  smoother
+- Students seemed to be engaged with the handout for longer than Session 2....
+- I tried "re-asking" questions, or asking questions that basically had the same
+  answer as a previously student statement (in LBT mode). Not sure if this is
+  irritating to students, but it seems to me a teacher DOF if some students look
+  mystified.
+- I gave the students the chance to ask questions or call out pairs of
+  variables. I only got questions, and we didn't do any Live EDA. (We also had
+  to transition to the next class, which probably affected this.)
+
+** General thoughts
+- Using LBT for a student-driven experience: I thought LBT worked well for
+  working through a set curriculum in an adaptive fashion, but couldn't get
+  students to then engage in a student-driven 'Live EDA' as I was planning. It
+  seems I'll need more scaffolding if I want to get to a truly student-driven
+  LBT session.
