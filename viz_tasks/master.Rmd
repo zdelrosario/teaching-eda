@@ -1,0 +1,234 @@
+---
+title: "The Visual Hierarchy"
+author: "Zach"
+date: 2019-02-16
+bibliography: bibtex_database.bib
+output: github_document
+---
+
+In this lesson, we will illustrate different methods of visualizing information.
+The purpose of this exercise is to determine which methods are the most
+effective -- in terms of 'ease of interpretation.' You will rank a number of
+different visualizations -- of the same data -- in terms of how easily you can
+draw comparisons. This will lead to prescriptive suggestions about constructing
+visualizations, which will be useful when designing graphics.
+
+<!-- solution-begin -->
+The visual hierarchy was proposed by [@cleveland1985graphical] in 1985. The
+concept is that certain *perceptual tasks* -- small components of interpreting
+graphics -- require more or less effort on the part of the viewer. Easier tasks
+are more result in a more readable visualization of data; since our goal should
+be to both learn and communicate information as clearly as possible, easier
+tasks are better tasks.
+
+Their hierarchy, in order of descending ease, is:
+
+1. Position along a common scale
+2. Position on identical but nonaligned scales
+3. Length
+4. Angle; Slope^[With slope not too close to 0, $\pi/2$, or $\pi$.]
+5. Area
+6. Volume; Density; Color saturation
+7. Color hue
+<!-- solution-end -->
+
+```{r setup, echo=FALSE, include=FALSE}
+library(tidyverse)
+
+asp_ratio  <- 4 / 4
+img_width  <- 5
+img_height <- img_width * asp_ratio
+
+# Common theme settings
+theme_common <- function() {
+  theme_minimal() %+replace%
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
+    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
+
+    aspect.ratio = asp_ratio,
+
+    ## plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+    ## panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+
+    legend.text = element_text(size = 10),
+
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90")
+  )
+}
+
+# Custom save
+mysave <- function(filename) {
+  ggsave(
+    filename = filename,
+    height   = img_height,
+    width    = img_width,
+    units    = "in"
+    ## device   = cairo_ps
+  )
+}
+```
+
+<!-- solution-begin -->
+## Define figures for different tasks
+
+### Common scale
+```{r }
+fig_common <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  group_by(clarity, color) %>%
+  summarize(n = n()) %>%
+  ggplot(aes(x = clarity, y = n, group = color, color = as.factor(color))) +
+  geom_line() +
+  geom_point(size = 2) +
+  scale_color_discrete(name = "Color") +
+  coord_flip() +
+  theme_common() +
+  labs(
+    x = "Clarity",
+    y = "Count",
+    title = "COM"
+  )
+mysave("../images/01_common_scale.png")
+```
+
+### Nonaligned scale
+```{r }
+fig_nonaligned <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  ggplot(aes(x = clarity)) +
+  geom_bar() +
+  coord_flip() +
+  scale_y_continuous(breaks = c(0, 1e3, 2e3, 3e3)) +
+  facet_grid(.~color) +
+  theme_common() +
+  theme(aspect.ratio = 4 / 3) +
+  labs(
+    x = "Clarity",
+    y = "Count",
+    title = "NON"
+  )
+mysave("../images/02_nonaligned_scale.png")
+```
+
+### Length
+```{r }
+fig_length <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  ggplot(aes(x = clarity, fill = as.factor(color))) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_discrete(name = "Color") +
+  theme_common() +
+  labs(
+    x = "Clarity",
+    y = "Count",
+    title = "LEN"
+  )
+mysave("../images/03_length.png")
+```
+
+### Angle
+```{r }
+fig_angle <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  group_by(clarity, color) %>%
+  summarize(n = n()) %>%
+  ggplot(aes(x = "", y = n, fill = color)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_discrete(name = "Color") +
+  facet_wrap(.~clarity) +
+  theme_common() +
+  labs(
+    x = NULL,
+    y = "Count",
+    title = "ANG"
+  )
+mysave("../images/04_angle.png")
+```
+
+### Area
+```{r }
+fig_area <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  group_by(clarity, color) %>%
+  summarize(n = n()) %>%
+  ggplot(aes(clarity, color, size = n)) +
+  geom_point() +
+  scale_size_continuous(range = c(1, 15)) +
+  theme_common() +
+  labs(
+    x = "Clarity",
+    y = "Color",
+    title = "PIR2"
+  )
+mysave("../images/05_area.png")
+```
+
+### Color hue
+```{r }
+fig_hue <-
+  diamonds %>%
+  filter(
+    color %in% c("D", "E", "F"),
+    clarity %in% c("SI1", "SI2", "VS1", "VS2")
+  ) %>%
+  group_by(clarity, color) %>%
+  summarize(n = n()) %>%
+  ggplot(aes(clarity, color, color = n)) +
+  geom_point(size = 10) +
+  theme_common() +
+  labs(
+    x = "Clarity",
+    y = "Color",
+    title = "HUE"
+  )
+mysave("../images/06_hue.png")
+```
+
+### Package the figures
+```{r }
+set.seed(102)
+df_figs <-
+  tribble(
+                 ~task, ~fig,
+        "Common scale", fig_common,
+    "Nonaligned scale", fig_nonaligned,
+              "Length", fig_length,
+               "Angle", fig_angle,
+                "Area", fig_area,
+           "Color hue", fig_hue
+  ) %>%
+  sample_frac(size = 1)
+```
+<!-- solution-end -->
+
+### Plot all visual tasks figures
+
+```{r }
+df_figs %>% pull(fig)
+```
