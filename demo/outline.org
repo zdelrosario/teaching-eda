@@ -1,0 +1,54 @@
+* Learning Goals
+1. Students will analyze and improve graphics using the hierarchy of visual
+   perception tasks.
+2. Students will apply the exploration and questioning phases of EDA.
+
+* Outline
+** Overview (5 min)
+- "I'd love to meet all of you, but we have limited time."
+- "We're going to simulate a lesson from Week 3 of a class."
+- "By this point, every student would have a laptop with Rstudio, we would have
+  done several small coding assignments, and would have a practical grasp of the
+  grammar of graphics."
+
+- *Concept map for EDA class?*
+
+- "First, we're going to study /visualizations themselves/. Then, we're going to
+  use graphics to study a dataset."
+
+** Intro to Vis (25 min)
+- *Engage* (2 min) Brief intro to the data
+  + `diamonds` dataset; counts in each category
+
+- *Explore* (8 min) Interpret and Rank
+  + "All of these show the same data in different ways"
+  1. Name the variables being shown, describe how they are visualized
+  2. Rank the visualizations in terms of how easily you can draw comparisons;
+     give your top 3
+
+- *Explain* (10 min)
+  + What are the variables? How do they differ?
+  + What are your top 3?
+    - Cleveland and McGill (1985)
+
+- *Elaborate* (5 min) "Good vs bad vis"
+  + "Let's analyze a graph together; how can we improve it?"
+
+** EDA (25 min)
+"I don't have time to make you experts in R, but we can get started anyway."
+
+- *Engage* (2 min) Intro to `autos` data
+  + `autos` data; we just looked at this
+
+- *Explore* (8 min) Worksheet
+  + Static virtual worksheet
+
+- *Explain* (5 min)
+  +
+
+- *Elaborate* (8 min)
+  + Interactive virtual worksheet
+
+** Wrapup (5 min)
+- *Evaluate* (5 min) Takeaways?
+  + "What did you learn today?"

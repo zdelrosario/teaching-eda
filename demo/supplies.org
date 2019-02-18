@@ -1,0 +1,13 @@
+* TODO Cardstock vis
+Print 6 `diamonds` vis examples on cardstock; copies enough for 10 sets.
+
+* TODO Virtual worksheet
+Upload virtual worksheet to shinyapps.io; develop two stages
+- Stage 1: Static
+- Stage 2: Interactive
+
+* TODO Name tents
+- Heavy paper
+
+* TODO Concept map for EDA class
+- /extremely/ optional; would look good, though!
