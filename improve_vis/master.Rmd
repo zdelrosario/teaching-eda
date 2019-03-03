@@ -1,0 +1,280 @@
+---
+title: "Judging Visualizations"
+author: "Zach"
+date: 2019-03-03
+output:
+  github_document:
+    toc: true
+    toc_depth: 6
+---
+
+```{r parameters, message = FALSE, warning = FALSE}
+# Libraries
+## --------------------------------------------------
+library(tidyverse)
+
+# Parameters
+## --------------------------------------------------
+## Data filename
+file_name <- "~/Sync/data/autos/imports-85.data"
+## Variable names from the UCI site
+var_names <-
+  c(
+    "symboling",          # Actuarial risk adjustment: -3 Safest, +3 Riskiest
+    "normalized_losses",  # Average insurance loss, averaged over body_style
+    "make",               # Manufacturer
+    "fuel_type",          # Gas or diesel
+    "aspiration",         # Standard or turbo
+    "num_of_doors",       #
+    "body_style",         # hardtop, wagon, sedan, hatchback, convertible
+    "drive_wheels",       # Front, rear, all
+    "engine_location",    # Front, rear
+    "wheel_base",         # Distance between front & rear wheels
+    "length",             #
+    "width",              #
+    "height",             #
+    "curb_weight",        # Weight w/o cargo
+    "engine_type",        # Engine layout
+    "num_of_cylinders",   #
+    "engine_size",        # Total engine displacement
+    "fuel_system",        # Fuel feed system
+    "bore",               # Cylinder diameter
+    "stroke",             # Cylinder displacement distance
+    "compression_ratio",  # Swept volume compression ratio
+    "horsepower",         # Engine power
+    "peak_rpm",           # Peak rotations per minute (redline?)
+    "city_mpg",           # City fuel efficiency
+    "highway_mpg",        # Highway fuel efficiency
+    "price"               # MSRP
+  )
+
+# Parameters
+## --------------------------------------------------
+parse_numchar <- function(x) {
+  case_when(
+        x == "two" ~ 2L,
+        x == "three" ~ 3L,
+        x == "four" ~ 4L,
+        x == "five" ~ 5L,
+        x == "six" ~ 6L,
+        x == "seven" ~ 7L,
+        x == "eight" ~ 8L,
+        x == "nine" ~ 9L,
+        x == "ten" ~ 10L,
+        x == "eleven" ~ 11L,
+        x == "twelve" ~ 12L,
+        TRUE ~ NA_integer_
+      )
+}
+## Common theme settings
+theme_common <- function() {
+  theme_minimal() %+replace%
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
+    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
+
+    aspect.ratio = 3 / 4,
+
+    plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+    panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
+
+    legend.text = element_text(size = 10),
+
+    panel.grid.major = element_line(color = "grey90"),
+    panel.grid.minor = element_line(color = "grey90")
+  )
+}
+```
+
+First, we need to load and wrangle the data a bit.
+
+```{r load_n_wrangle, warning=FALSE, message=FALSE}
+df_raw <-
+  read_csv(
+    file_name,
+    col_names = var_names,
+    col_types = cols(
+      .default = col_number(),
+      symboling = col_integer(),
+      normalized_losses = col_integer(),
+      make = col_character(),
+      fuel_type = col_character(),
+      aspiration = col_character(),
+      num_of_doors = col_character(), # Needs manual fix!
+      body_style = col_character(),
+      drive_wheels = col_character(),
+      engine_location = col_character(),
+      engine_type = col_character(),
+      num_of_cylinders = col_character(), # Also needs manual fix!
+      engine_size = col_integer(),
+      fuel_system = col_character()
+    )
+  )
+```
+
+The string-coded numbers are obnoxious; let's map those to integers.
+
+```{r}
+df_raw %>% pull(num_of_doors) %>% unique()
+df_raw %>% pull(num_of_cylinders) %>% unique()
+```
+
+Manual fixes for some of the variables.
+
+```{r}
+df_autos <-
+  df_raw %>%
+  mutate(
+    num_of_doors = parse_numchar(num_of_doors),
+    num_of_cylinders = parse_numchar(num_of_cylinders)
+  ) %>%
+  rowid_to_column(var = "id")
+```
+
+Finally, we can analyze the data.
+
+## Brief Overview of the Data
+<!-- -------------------------------------------------- -->
+
+Let's get an overview of the data. It's always a good idea to look at a glimpse
+and a summary.
+
+```{r data_glimpse}
+df_autos %>% glimpse
+```
+
+```{r data_summary}
+df_autos %>% summary
+```
+
+As a reminder, we usually start with single-variable investigations.
+
+```{r hist_price}
+df_autos %>%
+  ggplot(aes(price)) +
+  geom_histogram(bins = 30) +
+  theme_common() +
+  labs(
+    x = "Price (1985 Dollars)",
+    y = "Count"
+  )
+```
+
+We then move to 2D investigations.
+
+```{r price_v_weight}
+df_autos %>%
+  ggplot(aes(curb_weight, price)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_common() +
+  labs(
+    x = "Curb Weight (lbs)",
+    y =  "Price (1985 Dollars)"
+  )
+```
+
+## Judging
+<!-- -------------------------------------------------- -->
+
+Look at the following visualization:
+
+```{r three2}
+df_autos %>%
+  ggplot(aes(fuel_type, body_style)) +
+  geom_point(aes(color = compression_ratio)) +
+  theme_common()
+```
+
+__q1__ Which rung on the visual hierarchy is used to visualize `compression_ratio` here?
+
+<!-- solution-begin -->
+`compression_ratio` is displayed here using color hue, which is on the bottom of
+the visual hierarchy.
+<!-- solution-end -->
+
+__q2__ Is this a good visualization? Why or why not?
+
+<!-- solution-begin -->
+This is a terrible visualization! Here are a few reasons why:
+
+1. Overplotting: There are multiple points overlapping on the same position. It's impossible
+   to tell this from the visualization above. A solution is to 'jitter' the data.
+2. Use of color: Color is one of the least-effective ways to convey information. We could
+   plot `compression_ratio` against one of the axes instead, and it would be far more
+   effective.
+3. Orientation: Generally, we have more space along a horizontal axis than a vertical
+   one. We could put `body_style` along the horizontal axis for a more effective use
+   of space. (This is a relatively minor point.)
+<!-- solution-end -->
+
+__q3__ Construct a *quality* visualization of `compression_ratio`, `body_style`, and `fuel_type`.
+
+<!-- solution-begin -->
+Here's my improved graph. From this, we can see the striking difference between
+diesel and gas engines; diesel engines use a 'compression ignition' approach to
+combustion, while gas engines use spark plugs. By design, diesel engines tend to
+have a higher compression ratio, in order to ignite the fuel.
+
+```{r three3}
+df_autos %>%
+  ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
+  geom_point() +
+  theme_common() +
+  theme(legend.position = "bottom")
+```
+
+From this visualization, it's immediately apparent that gas and diesel engines
+have very different `compression_ratio` values.
+<!-- solution-end -->
+
+## More Graphs
+<!-- -------------------------------------------------- -->
+
+```{r mpg_base}
+df_autos %>%
+  ggplot(aes(city_mpg, highway_mpg)) +
+  geom_point() +
+  theme_common()
+```
+
+__q4__ What does the following visualization show us?
+
+<!-- solution-begin -->
+From this, we can see:
+
+- Highway and city mileage are closely related.
+- Highway mileage is generally larger than city mileage.
+
+We're missing some things, though!
+
+- This doesn't show us *all* the data; there is overplotting. This is because
+  MPG is generally rounded.
+<!-- solution-end -->
+
+__q5__ How might we improve this graph?
+
+<!-- solution-begin -->
+Here's my modified graph:
+
+```{r mpg_improved}
+df_autos %>%
+  ggplot(aes(city_mpg, highway_mpg)) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  geom_count() +
+  scale_size_continuous(name = "Count") +
+  theme_common() +
+  theme(legend.position = "bottom")
+```
+
+What this shows us:
+
+- *All* of these cars have greater (or equal) highway than city MPG.
+- An explicit guide for the line of equal city and highway mileage. This
+  shows us that a few cars have exactly the same mileage!
+- The number of vehicles at each point -- MPG is concentrated towards the
+  middle-lower range.
+<!-- solution-end -->
