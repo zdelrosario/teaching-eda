@@ -13,6 +13,9 @@ CHALLENGE = challenge
 
 all: ${SOLUTION}.Rmd ${CHALLENGE}.Rmd
 
+grid:
+	pdflatex grid.tex
+
 ${SOLUTION}.Rmd: ${MASTER}.Rmd
 	sed -E \
 	-e '/<!-- task-begin -->/,/<!-- task-end -->/d' \
@@ -33,3 +36,4 @@ ${CHALLENGE}.Rmd: ${MASTER}.Rmd
 
 clean:
 	rm -f ${CHALLENGE}.Rmd ${SOLUTION}.Rmd
+	rm -f grid.aux

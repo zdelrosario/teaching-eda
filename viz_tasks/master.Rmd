@@ -35,8 +35,8 @@ Their hierarchy, in order of descending ease, is:
 ```{r setup, echo=FALSE, include=FALSE}
 library(tidyverse)
 
-sel_colors <- c("E", "F")
-sel_clarities <- c("SI1", "SI2", "VS1", "VS2")
+sel_wheels <- c("fwd", "rwd")
+sel_style  <- c("hatchback", "sedan", "wagon")
 
 asp_ratio  <- 4 / 4
 img_width  <- 5
@@ -75,27 +75,140 @@ mysave <- function(filename) {
 }
 ```
 
+## Data load + wrangle.
+
+```{r load_n_wrangle}
+# Parameters
+## --------------------------------------------------
+## Data filename
+file_name <- "~/Sync/data/autos/imports-85.data"
+## Variable names from the UCI site
+var_names <-
+  c(
+    "symboling",          # Actuarial risk adjustment: -3 Safest, +3 Riskiest
+    "normalized_losses",  # Average insurance loss, averaged over body_style
+    "make",               # Manufacturer
+    "fuel_type",          # Gas or diesel
+    "aspiration",         # Standard or turbo
+    "num_of_doors",       #
+    "body_style",         # hardtop, wagon, sedan, hatchback, convertible
+    "drive_wheels",       # Front, rear, all
+    "engine_location",    # Front, rear
+    "wheel_base",         # Distance between front & rear wheels
+    "length",             #
+    "width",              #
+    "height",             #
+    "curb_weight",        # Weight w/o cargo
+    "engine_type",        # Engine layout
+    "num_of_cylinders",   #
+    "engine_size",        # Total engine displacement
+    "fuel_system",        # Fuel feed system
+    "bore",               # Cylinder diameter
+    "stroke",             # Cylinder displacement distance
+    "compression_ratio",  # Swept volume compression ratio
+    "horsepower",         # Engine power
+    "peak_rpm",           # Peak rotations per minute (redline?)
+    "city_mpg",           # City fuel efficiency
+    "highway_mpg",        # Highway fuel efficiency
+    "price"               # MSRP
+  )
+
+# Parameters
+## --------------------------------------------------
+parse_numchar <- function(x) {
+  case_when(
+        x == "two" ~ 2L,
+        x == "three" ~ 3L,
+        x == "four" ~ 4L,
+        x == "five" ~ 5L,
+        x == "six" ~ 6L,
+        x == "seven" ~ 7L,
+        x == "eight" ~ 8L,
+        x == "nine" ~ 9L,
+        x == "ten" ~ 10L,
+        x == "eleven" ~ 11L,
+        x == "twelve" ~ 12L,
+        TRUE ~ NA_integer_
+      )
+}
+
+```
+
+First, we need to load and wrangle the data a bit.
+
+```{r load_n_wrangle, warning=FALSE, message=FALSE}
+df_raw <-
+  read_csv(
+    file_name,
+    col_names = var_names,
+    col_types = cols(
+      .default = col_number(),
+      symboling = col_integer(),
+      normalized_losses = col_integer(),
+      make = col_character(),
+      fuel_type = col_character(),
+      aspiration = col_character(),
+      num_of_doors = col_character(), # Needs manual fix!
+      body_style = col_character(),
+      drive_wheels = col_character(),
+      engine_location = col_character(),
+      engine_type = col_character(),
+      num_of_cylinders = col_character(), # Also needs manual fix!
+      engine_size = col_integer(),
+      fuel_system = col_character()
+    )
+  )
+```
+
+The string-coded numbers are obnoxious; let's map those to integers.
+
+```{r}
+df_raw %>% pull(num_of_doors) %>% unique()
+df_raw %>% pull(num_of_cylinders) %>% unique()
+```
+
+Manual fixes for some of the variables.
+
+```{r}
+df_autos <-
+  df_raw %>%
+  mutate(
+    num_of_doors = parse_numchar(num_of_doors),
+    num_of_cylinders = parse_numchar(num_of_cylinders)
+  ) %>%
+  rowid_to_column(var = "id")
+```
+
+Finally, we can analyze the data.
+
 <!-- solution-begin -->
 ## Define figures for different tasks
 
 ### Common scale
 ```{r }
 fig_common <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  group_by(clarity, color) %>%
+  group_by(drive_wheels, body_style) %>%
   summarize(n = n()) %>%
-  ggplot(aes(x = clarity, y = n, group = color, color = as.factor(color))) +
+  ggplot(
+    aes(
+      x     = body_style,
+      y     = n,
+      group = drive_wheels,
+      color = as.factor(drive_wheels)
+    )
+  ) +
   geom_line() +
   geom_point(size = 2) +
-  scale_color_discrete(name = "Color") +
+  scale_color_discrete(name = "Drive") +
   coord_flip() +
   theme_common() +
   labs(
-    x = "Clarity",
+    x = "Style",
     y = "Count",
     title = "COM"
   )
@@ -105,20 +218,23 @@ mysave("../images/01_common_scale.png")
 ### Nonaligned scale
 ```{r }
 fig_nonaligned <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  ggplot(aes(x = clarity)) +
+  ggplot(aes(x = body_style)) +
   geom_bar() +
   coord_flip() +
-  scale_y_continuous(breaks = c(0, 1e3, 2e3, 3e3)) +
-  facet_grid(.~color) +
+  ## scale_y_continuous(breaks = c(0, 10, 50)) +
+  facet_grid(.~drive_wheels) +
   theme_common() +
-  theme(aspect.ratio = 4 / 3) +
+  theme(
+    aspect.ratio = 4 / 3,
+    strip.text.x = element_text(size = 12)
+  ) +
   labs(
-    x = "Clarity",
+    x = "Style",
     y = "Count",
     title = "NON"
   )
@@ -128,18 +244,18 @@ mysave("../images/02_nonaligned_scale.png")
 ### Length
 ```{r }
 fig_length <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  ggplot(aes(x = clarity, fill = as.factor(color))) +
+  ggplot(aes(x = body_style, fill = as.factor(drive_wheels))) +
   geom_bar() +
   coord_flip() +
-  scale_fill_discrete(name = "Color") +
+  scale_fill_discrete(name = "Drive") +
   theme_common() +
   labs(
-    x = "Clarity",
+    x = "Style",
     y = "Count",
     title = "LEN"
   )
@@ -149,18 +265,18 @@ mysave("../images/03_length.png")
 ### Angle
 ```{r }
 fig_angle <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  group_by(clarity, color) %>%
+  group_by(drive_wheels, body_style) %>%
   summarize(n = n()) %>%
-  ggplot(aes(x = "", y = n, fill = color)) +
+  ggplot(aes(x = "", y = n, fill = drive_wheels)) +
   geom_bar(width = 1, stat = "identity") +
   coord_polar("y", start = 0) +
-  scale_fill_discrete(name = "Color") +
-  facet_wrap(.~clarity) +
+  scale_fill_discrete(name = "Drive") +
+  facet_wrap(.~body_style) +
   theme_common() +
   labs(
     x = NULL,
@@ -173,20 +289,20 @@ mysave("../images/04_angle.png")
 ### Area
 ```{r }
 fig_area <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  group_by(clarity, color) %>%
+  group_by(drive_wheels, body_style) %>%
   summarize(n = n()) %>%
-  ggplot(aes(clarity, color, size = n)) +
+  ggplot(aes(body_style, drive_wheels, size = n)) +
   geom_point() +
   scale_size_continuous(range = c(1, 15)) +
   theme_common() +
   labs(
-    x = "Clarity",
-    y = "Color",
+    x = "Style",
+    y = "Drive",
     title = "PIR2"
   )
 mysave("../images/05_area.png")
@@ -195,19 +311,19 @@ mysave("../images/05_area.png")
 ### Color hue
 ```{r }
 fig_hue <-
-  diamonds %>%
+  df_autos %>%
   filter(
-    color %in% sel_colors,
-    clarity %in% sel_clarities
+    drive_wheels %in% sel_wheels,
+    body_style %in% sel_style
   ) %>%
-  group_by(clarity, color) %>%
+  group_by(drive_wheels, body_style) %>%
   summarize(n = n()) %>%
-  ggplot(aes(clarity, color, color = n)) +
+  ggplot(aes(body_style, drive_wheels, color = n)) +
   geom_point(size = 10) +
   theme_common() +
   labs(
-    x = "Clarity",
-    y = "Color",
+    x = "Style",
+    y = "Drive",
     title = "HUE"
   )
 mysave("../images/06_hue.png")
