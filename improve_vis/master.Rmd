@@ -141,7 +141,7 @@ Finally, we can analyze the data.
 
 Look at the following visualization:
 
-```{r three2}
+```{r three_orig}
 df_autos %>%
   ggplot(aes(fuel_type, body_style)) +
   geom_point(aes(color = compression_ratio)) +
@@ -173,13 +173,23 @@ This is a terrible visualization! Here are a few reasons why:
 
 __q3__ Construct a *quality* visualization of `compression_ratio`, `body_style`, and `fuel_type`.
 
+Hint: Start by swapping pairs of variables.
+
+```{r three_repeat}
+df_autos %>%
+  ggplot(aes(fuel_type, body_style)) +
+  geom_point(aes(color = compression_ratio)) +
+  theme_common() +
+  theme(legend.position = "bottom")
+```
+
 <!-- solution-begin -->
 Here's my improved graph. From this, we can see the striking difference between
 diesel and gas engines; diesel engines use a 'compression ignition' approach to
 combustion, while gas engines use spark plugs. By design, diesel engines tend to
 have a higher compression ratio, in order to ignite the fuel.
 
-```{r three3}
+```{r three_improved}
 df_autos %>%
   ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
   geom_point() +
@@ -189,6 +199,26 @@ df_autos %>%
 
 From this visualization, it's immediately apparent that gas and diesel engines
 have very different `compression_ratio` values.
+<!-- solution-end -->
+
+__q4__ What can you see in your improved visualization?
+
+<!-- solution-begin -->
+Some observations, in no particular order:
+
+1. Based on the density of dots, there are more `hatchback` and `sedan` style
+   vehicles in this dataset, compared to the other types.
+2. `diesel` engines tend to have a much higher compression ratio than `gas`
+   engines. This makes sense -- diesel engines use compression ignition to
+   ignite the fuel, rather than a sparkplug. We might expect a higher
+   compression ratio as a consequence.
+3. There are no `diesel` convertibles. From some quick Google searching, it
+   seems that diesel cars used to be noisy and smelly, which is in conflict with
+   the perceived luxury of convertibles. Modern diesel convertibles apparently
+   exist.
+4. There are far fewer `diesel` vehicles than `gas` vehicles in this dataset. A
+   Finnish friend of mine pointed out that diesel vehicles are unpopular in the
+   US, but are more popular in Europe.
 <!-- solution-end -->
 
 ## More Graphs
@@ -201,7 +231,7 @@ df_autos %>%
   theme_common()
 ```
 
-__q4__ What does the following visualization show us?
+__q5__ What does the following visualization show us?
 
 <!-- solution-begin -->
 From this, we can see:
@@ -210,7 +240,7 @@ From this, we can see:
 - Highway mileage is generally larger than city mileage.
 <!-- solution-end -->
 
-__q5__ Is this a good visualization? Why or why not?
+__q6__ Is this a good visualization? Why or why not?
 
 <!-- solution-begin -->
 This visualization is ok, but due to the way the data are plotted,
@@ -222,7 +252,7 @@ we're missing some facts:
   difficult to tell from the current vis.
 <!-- solution-end -->
 
-__q6__ How might we improve this graph?
+__q7__ How might we improve this graph?
 
 <!-- solution-begin -->
 Here's my modified graph:
@@ -236,12 +266,16 @@ df_autos %>%
   theme_common() +
   theme(legend.position = "bottom")
 ```
+<!-- solution-end -->
 
+__q8__ What can you see in your improved visualization?
+
+<!-- solution-begin -->
 What this shows us:
 
-- *All* of these cars have greater (or equal) highway than city MPG.
-- An explicit guide for the line of equal city and highway mileage. This
-  shows us that a few cars have exactly the same mileage!
-- The number of vehicles at each point -- MPG is concentrated towards the
-  middle-lower range.
+1. *All* of these cars have greater (or equal) highway than city MPG.
+2. An explicit guide for the line of equal city and highway mileage. This
+   shows us that a few cars have the same mileage for both kinds of driving.
+3. The number of vehicles at each point -- MPG is concentrated towards the
+   middle-lower range.
 <!-- solution-end -->
