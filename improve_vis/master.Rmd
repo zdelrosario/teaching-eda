@@ -70,8 +70,8 @@ parse_numchar <- function(x) {
 theme_common <- function() {
   theme_minimal() %+replace%
   theme(
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
+    axis.text.x = element_text(size = 14),
+    axis.text.y = element_text(size = 14),
     axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
     axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
 
@@ -80,7 +80,8 @@ theme_common <- function() {
     plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
     panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
 
-    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 14),
 
     panel.grid.major = element_line(color = "grey90"),
     panel.grid.minor = element_line(color = "grey90")
@@ -135,48 +136,6 @@ df_autos <-
 
 Finally, we can analyze the data.
 
-## Brief Overview of the Data
-<!-- -------------------------------------------------- -->
-
-Let's get an overview of the data. It's always a good idea to look at a glimpse
-and a summary.
-
-```{r data_glimpse}
-df_autos %>% glimpse
-```
-
-```{r data_summary}
-df_autos %>% summary
-```
-
-As a reminder, we usually start with single-variable investigations.
-
-```{r hist_price}
-df_autos %>%
-  ggplot(aes(price)) +
-  geom_histogram(bins = 30) +
-  theme_common() +
-  labs(
-    x = "Price (1985 Dollars)",
-    y = "Count"
-  )
-```
-
-We then move to 2D investigations.
-
-```{r price_v_weight}
-df_autos %>%
-  ggplot(aes(curb_weight, price)) +
-  geom_point() +
-  scale_x_log10() +
-  scale_y_log10() +
-  theme_common() +
-  labs(
-    x = "Curb Weight (lbs)",
-    y =  "Price (1985 Dollars)"
-  )
-```
-
 ## Judging
 <!-- -------------------------------------------------- -->
 
@@ -186,7 +145,8 @@ Look at the following visualization:
 df_autos %>%
   ggplot(aes(fuel_type, body_style)) +
   geom_point(aes(color = compression_ratio)) +
-  theme_common()
+  theme_common() +
+  theme(legend.position = "bottom")
 ```
 
 __q1__ Which rung on the visual hierarchy is used to visualize `compression_ratio` here?
@@ -248,14 +208,21 @@ From this, we can see:
 
 - Highway and city mileage are closely related.
 - Highway mileage is generally larger than city mileage.
+<!-- solution-end -->
 
-We're missing some things, though!
+__q5__ Is this a good visualization? Why or why not?
+
+<!-- solution-begin -->
+This visualization is ok, but due to the way the data are plotted,
+we're missing some facts:
 
 - This doesn't show us *all* the data; there is overplotting. This is because
   MPG is generally rounded.
+- Some of the cars have exactly the same highway and city mileage; this is
+  difficult to tell from the current vis.
 <!-- solution-end -->
 
-__q5__ How might we improve this graph?
+__q6__ How might we improve this graph?
 
 <!-- solution-begin -->
 Here's my modified graph:
