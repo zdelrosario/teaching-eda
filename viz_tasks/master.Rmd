@@ -308,9 +308,9 @@ fig_area <-
 mysave("../images/05_area.png")
 ```
 
-### Color hue
+### Color saturation
 ```{r }
-fig_hue <-
+fig_sat <-
   df_autos %>%
   filter(
     drive_wheels %in% sel_wheels,
@@ -324,9 +324,9 @@ fig_hue <-
   labs(
     x = "Style",
     y = "Drive",
-    title = "HUE"
+    title = "SAT"
   )
-mysave("../images/06_hue.png")
+mysave("../images/06_sat.png")
 ```
 
 ### Package the figures
@@ -340,7 +340,7 @@ df_figs <-
               "Length", fig_length,
                "Angle", fig_angle,
                 "Area", fig_area,
-           "Color hue", fig_hue
+           "Color sat", fig_sat
   ) %>%
   sample_frac(size = 1)
 ```
