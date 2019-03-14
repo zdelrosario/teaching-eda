@@ -1,0 +1,114 @@
+---
+title: "EDA Lesson"
+author: Zach
+date: 2019-03-14
+output:
+  revealjs::revealjs_presentation:
+    theme: black
+    transition: none
+---
+
+## Instructions
+
+1. Print your name on an index card
+2. Print your name on a name tent
+
+## Overview
+
+1. *Class Simulation*: Learning *Exploratory Data Analysis*
+    - Learn R
+    - Practice vis
+    - Explore data
+2. Today:
+    - Principles of Vis
+	- EDA
+3. Dataset: 1985 Imported cars (UCI ML)
+
+# Principles of Visualization
+
+## Sorting Task
+
+Let's compare some visualizations!
+
+Take the packet of 6 visualizations.
+
+1. Pairs: 10 minutes
+2. Full group: 5 minutes
+
+## Sorting Prompts
+
+1. How does each visualization show Counts?
+2. Which is larger? By how many?
+    - Count of *Wagons* with *fwd* OR
+	- Count of *Wagons* with *rwd*
+3. Rank the 6 visualizations in terms of how well they help you answer this
+   question. *Be ready to give a 1-to-6 order!*
+
+## Group Rankings?
+
+What were your rankings?
+
+## The Visual Hierarchy
+
+1. Position along a common scale
+2. Position on identical but nonaligned scales
+3. Length
+4. Angle; Slope
+5. Area
+6. Volume; Density; Color saturation
+7. Color hue
+
+Cleveland and McGill (1985) *Science*
+
+## Improving a Graph
+
+(Transition to demo)
+
+## End of Section
+
+A *good* visualization helps us see patterns.
+
+# Doing EDA
+
+## Handout
+
+Take the 'Efficiency vs Price' handout.
+
+1. Solo: 2 minutes
+2. Pairs: 2 minutes
+3. Full group: 8 minutes
+
+## Group Discussion
+
+1. Highway vs City?
+2. Efficiency vs Price?
+3. "Stripes"?
+4. Solid curves?
+
+## Exploration
+
+(Transition to EDA)
+
+(Enough laptops? Use: http://bit.ly/zdr_autos)
+
+## Important Lesson!
+
+"Correlation does not necessarily imply causation"
+
+## End of Section
+
+Curiosity and skepticism
+
+# Looking Forward
+
+## Where next?
+
+Where would this class go next?
+
+- Lots of practice with vis
+- Lots of practice doing EDA
+- Towards student-driven tasks
+- More tools in R
+- End with student-defined projects
+
+Email: zdr@stanford.edu

@@ -1,0 +1,135 @@
+Intro EDA Lesson Plan
+Timeslot: 1 hour
+
+* Classroom Setting
+- Setup notes:
+  + Ensure each pair of students has a packet of 6 vis-tasks figures
+  + Ensure each students has a worksheet OR a computer for [[https://zdelrosario.shinyapps.io/autos_stage2/][worksheet]]
+
+- Before class:
+  1. "Print your name on an index card"
+  2. "Print your name on a name tent"
+
+- Today:
+  1. Principles of Visualization
+  2. Doing EDA
+
+* Overview (2 min)
+- "This would be in week 2 of a full-semester class on EDA"
+  + Overall goal: Teach students to do /exporatory data analysis/ -- how to
+    approach a dataset and, with a combination of skepticism and curiosity,
+    identify and understand its trends.
+  + Learn R (We'll shortcut this today)
+  + Practice visualizations
+  + Practice exploring data; visualize, hypothesize, test
+- "I'd love to do introductions, but we have limited time today."
+- Dataset: 1985 Imported Cars
+
+* Principles of Visualization (25 min)
+** Learning Goals
+1. Students will determine how information is visualized on a graph.
+2. Students will use the /visual hierarchy/ to rank different visualizations of
+   the same information.
+3. Students will criticize a graph and suggest improvements.
+
+** Hierarchy of visual tasks
+Give student pairs each a packet of 6 vis-tasks figures:
+  COM  - Common scale
+  NON  - Nonaligned scale
+  LEN  - Length
+  ANG  - Angle
+  PIR2 - Area
+  SAT  - Color saturation
+- *Note: All visualizations show /exactly/ the same data.*
+
+-----
+
+Prompts: *(Pairs)* 8 min
+- How does each visualization show Counts?
+- Which is larger? By how much?
+    Count of *Wagons* with *fwd* Drive OR Count of *Wagons* with *rwd* Drive
+- Rank the 6 visualizations in terms of how well they help you answer this
+  question. *Be ready to give a 1-to-6 order!*
+
+-----
+
+Group Ranking: *(Discuss)* 2 min
+- Generate a matrix of visualization ranks
+
+-----
+
+Discussion: *(LBT)* 5 min
+- Cleveland and McGill (1985) the visual hierarchy: Ranked in terms of /accuracy
+  of perception/; not a rule, but a guideline. In descending order:
+
+  1. Position along a common scale
+  2. Position on identical but nonaligned scales
+  3. Length
+  4. Angle; Slope^[With slope not too close to 0, $\pi/2$, or $\pi$.]
+  5. Area
+  6. Volume; Density; Color saturation
+  7. Color hue
+
+- "Note: I asked you a slightly different question -- preference rather than accuracy."
+
+- Make sure to post-mortem this exercise!
+  + How do you feel about your rankings wrt given hierarchy?
+  + Any features of these graphs outside their hierarchy? (e.g. lines in COM)
+
+** Improving a graph
+Guided: *(LBT)* 10 minutes
+- Work through ~/Git/teaching-eda/improve_vis/master.Rmd worksheet
+- "What does our improved visualization show us?"
+- "A good visualization helps us see patterns: The 'bad' graph hid the fact that
+  diesel and gas engines have very different compression ratios. Our improved
+  graph helps us see this."
+
+* Doing EDA (25 min)
+** Learning Goals
+1. Students will connect patterns in data to phenomena in reality.
+2. Students will select their pairwise comparisons to answer questions about data.
+3. Students will learn that "correlation does not necessarily imply causation"
+
+** Handout
+Have students work through the `autos` worksheet (Digital version)
+- *(Solo)* 2 minutes
+- *(Pairs)* 5 minutes
+- *(LBT)* 5 minutes
+
+** Exploration
+Have students do their own EDA with the [[https://zdelrosario.shinyapps.io/autos_stage2/][interactive worksheet]]
+
+Guiding questions: *(Pairs)* 8 min
+- What other variables are related to `city_mpg` / `highway_mpg` and `price`?
+- How might these explain the observed relation between Fuel Efficiency and Price?
+
+Discussion: *(LBT)* 5 min
+- "Correlation does not necessarily imply causation"
+
+* Looking Forward (2 min)
+Where would this class go next?
+- Lots of practice making visualizations
+- Lots of practice doing EDA on more datasets
+- Gradual progression towards student-driven investigations
+- More tools in R
+- End with student-defined projects
+
+* Timeline
+| Overview                |  2 |
+| Vis Hierarchy           |    |
+| Hierarchy (Pairs)       | 10 |
+| Hierarchy (LBT)         |  5 |
+| Improving a graph (LBT) | 10 |
+| EDA                     |    |
+| Autos handout (Solo)    |  2 |
+| Autos handout (Pairs)   |  2 |
+| Autos handout (LBT)     |  8 |
+| Autos EDA (Pairs)       |  8 |
+| Autos EDA (LBT)         |  5 |
+| Wrapup                  |    |
+| Looking forward         |  2 |
+|-------------------------+----|
+| Total                   | 54 |
+#+TBLFM: @14$2=vsum(@1$2..@13$2)
+* Notes 2019-03-14
+"Principles of Visualization" got people really excited; took ~40 minutes!
