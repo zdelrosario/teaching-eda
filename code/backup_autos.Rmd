@@ -337,8 +337,8 @@ df_autos %>%
     legend.position = "bottom"
   ) +
   labs(
-    x = "Vehicle Sale Price (1985 USD)",
-    y = "Fuel Efficiency (MPG)"
+    x = "Vehicle Retail Price (1985 USD)",
+    y = "Fuel Economy (MPG)"
   )
 ggsave(filename = "../images/mpg_vs_usd.eps")
 ```
@@ -375,6 +375,7 @@ df_autos %>%
 ```
 
 Efficiency varies (roughly) inversely with horsepower; the more likely
-relationship between price and efficiency is that people are *generally* more
-willing to pay extra for increased horsepower, and efficiency is necessarily
-decreased with increasing horsepower.
+relationship between price and efficiency is that in 1985, people were
+*generally* more willing to pay extra for increased horsepower -- efficiency is
+necessarily decreased with increasing horsepower, which leads to the observed
+relationship.
