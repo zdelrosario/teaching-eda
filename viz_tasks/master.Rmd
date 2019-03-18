@@ -207,6 +207,7 @@ fig_common <-
   scale_color_discrete(name = "Drive") +
   coord_flip() +
   theme_common() +
+  ## theme(legend.position = "bottom") +
   labs(
     x = "Style",
     y = "Count",
@@ -254,6 +255,7 @@ fig_length <-
   coord_flip() +
   scale_fill_discrete(name = "Drive") +
   theme_common() +
+  ## theme(legend.position = "bottom") +
   labs(
     x = "Style",
     y = "Count",
@@ -278,6 +280,7 @@ fig_angle <-
   scale_fill_discrete(name = "Drive") +
   facet_wrap(.~body_style) +
   theme_common() +
+  theme(legend.position = "bottom") +
   labs(
     x = NULL,
     y = "Count",
