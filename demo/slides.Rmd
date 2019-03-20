@@ -66,13 +66,14 @@ Cleveland and McGill (1985) *Science*
 
 ## End of Section
 
-A *good* visualization helps us see patterns.
+- Visualizations higher on the visual hierarchy are easier to use.
+- A *good* visualization helps us see patterns.
 
 # Doing EDA
 
 ## Handout
 
-Take the 'Efficiency vs Price' handout.
+Take the 'Economy vs Price' handout.
 
 1. Solo: 2 minutes
 2. Pairs: 2 minutes
@@ -81,7 +82,7 @@ Take the 'Efficiency vs Price' handout.
 ## Group Discussion
 
 1. Highway vs City?
-2. Efficiency vs Price?
+2. Economy vs Price?
 3. "Stripes"?
 4. Solid curves?
 
@@ -91,13 +92,10 @@ Take the 'Efficiency vs Price' handout.
 
 (Enough laptops? Use: http://bit.ly/zdr_autos)
 
-## Important Lesson!
-
-"Correlation does not necessarily imply causation"
-
 ## End of Section
 
-Curiosity and skepticism
+- "Correlation does not necessarily imply causation"
+- Curiosity and skepticism
 
 # Looking Forward
 
@@ -112,3 +110,8 @@ Where would this class go next?
 - End with student-defined projects
 
 Email: zdr@stanford.edu
+
+## Feedback
+
+- Feedback link: http://bit.ly/zdr_olin
+- Email: zdr@stanford.edu
