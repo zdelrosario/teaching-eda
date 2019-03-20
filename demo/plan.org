@@ -51,6 +51,8 @@ Prompts: *(Pairs)* 8 min
 - Rank the 6 visualizations in terms of how well they help you answer this
   question. *Be ready to give a 1-to-6 order!*
 
+*While making rounds, collect the index cards.*
+
 -----
 
 Group Ranking: *(Discuss)* 2 min
@@ -131,5 +133,8 @@ Where would this class go next?
 |-------------------------+----|
 | Total                   | 54 |
 #+TBLFM: @14$2=vsum(@1$2..@13$2)
+
 * Notes 2019-03-14
-"Principles of Visualization" got people really excited; took ~40 minutes!
+- "Principles of Visualization" got people really excited; took ~40 minutes!
+  + Could probably have entire lesson around this part alone
+- Lots of small tweaks
