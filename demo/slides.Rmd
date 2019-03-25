@@ -11,7 +11,7 @@ output:
 ## Instructions
 
 1. Print your name on an index card
-2. Print your name on a name tent
+<!-- 2. Print your name on a name tent -->
 
 ## Overview
 
@@ -32,8 +32,9 @@ Let's compare some visualizations!
 
 Take the packet of 6 visualizations.
 
-1. Pairs: 10 minutes
-2. Full group: 5 minutes
+1. Pairs: 8 minutes
+2. Collect rankings: 2 minutes
+3. Discussion: 5 minutes
 
 ## Sorting Prompts
 

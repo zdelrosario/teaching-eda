@@ -144,7 +144,7 @@ Look at the following visualization:
 ```{r three_orig}
 df_autos %>%
   ggplot(aes(fuel_type, body_style)) +
-  geom_point(aes(color = compression_ratio)) +
+  geom_point(aes(color = compression_ratio), size = 8) +
   theme_common() +
   theme(legend.position = "bottom")
 ```
@@ -178,7 +178,7 @@ Hint: Start by swapping pairs of variables.
 ```{r three_repeat}
 df_autos %>%
   ggplot(aes(fuel_type, body_style)) +
-  geom_point(aes(color = compression_ratio)) +
+  geom_point(aes(color = compression_ratio), size = 8) +
   theme_common() +
   theme(legend.position = "bottom")
 ```
@@ -192,7 +192,7 @@ have a higher compression ratio, in order to ignite the fuel.
 ```{r three_improved}
 df_autos %>%
   ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
-  geom_point() +
+  geom_point(size = 3) +
   theme_common() +
   theme(legend.position = "bottom")
 ```
@@ -227,7 +227,7 @@ Some observations, in no particular order:
 ```{r mpg_base}
 df_autos %>%
   ggplot(aes(city_mpg, highway_mpg)) +
-  geom_point() +
+  geom_point(point = 3) +
   theme_common()
 ```
 
