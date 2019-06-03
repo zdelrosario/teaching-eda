@@ -5,13 +5,11 @@ date: 2019-02-16
 bibliography: bibtex_database.bib
 output: github_document
 ---
-<!-- solution-begin -->
 The following document is a handout-worksheet version of the "Visual Hierarchy
 activity. While this is a workable way to run this activity, I suggest printing
 cards from `grid.pdf` and separating the individual figures. This will allow
 students to more easily sort the cards. The instructions on this sheet are still
 useful for prompting students, though.
-<!-- solution-end -->
 
 In this lesson, we will illustrate different methods of visualizing information.
 The purpose of this exercise is to determine which methods are the most
@@ -20,7 +18,6 @@ different visualizations -- of the same data -- in terms of how easily you can
 draw comparisons. This will lead to prescriptive suggestions about constructing
 visualizations, which will be useful when designing graphics.
 
-<!-- solution-begin -->
 The visual hierarchy was proposed by [@cleveland1985graphical] in 1985. The
 concept is that certain *perceptual tasks* -- small components of interpreting
 graphics -- require more or less effort on the part of the viewer. Easier tasks
@@ -37,7 +34,6 @@ Their hierarchy, in order of descending ease, is:
 5. Area
 6. Volume; Density; Color saturation
 7. Color hue
-<!-- solution-end -->
 
 ```{r setup, echo=FALSE, include=FALSE}
 library(tidyverse)

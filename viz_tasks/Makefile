@@ -1,5 +1,5 @@
 # Create challenge.Rmd and solution.Rmd files from master.Rmd file
-# 
+#
 # Usage:
 # % make              # Create challenge.Rmd and solution.Rmd files
 # % make clean        # Remove challenge.Rmd and solution.Rmd files
@@ -28,7 +28,7 @@ ${SOLUTION}.Rmd: ${MASTER}.Rmd
 ${CHALLENGE}.Rmd: ${MASTER}.Rmd
 	sed -E \
 	-e 's/^author:.*|.*# yaml-author.*/author: \"Your Name\"/' \
-	-e 's/^date:.*/date: 2018-/' \
+	-e 's/^date:.*/date: /' \
 	-e '/<!-- solution-begin -->/,/<!-- solution-end -->/d' \
 	-e '/# solution-begin/,/# solution-end/d' \
 	-e '/# task-(begin|end)/d' \

@@ -1,12 +1,12 @@
 # The Visual Hierarchy
 In this activity, students will learn about different ways of encoding
-information visually. As Cleveland and McGill[^1] showed with their /visual
-hierarchy/, different ways of displaying information lead to more or less
-accurate decodings by the reader. Through experiential and discussion-based
+information visually. As Cleveland and McGill<sup>1</sup> showed with their
+*visual hierarchy*, different ways of displaying information lead to more or
+less accurate decodings by the reader. Through experiential and discussion-based
 learning, students will:
 
 1. Determine how information is visualized on a graph
-2. Use the /visual hierarchy/ to rank different visualizations of the same
+2. Use the *visual hierarchy* to rank different visualizations of the same
    information
 3. Criticize a graph and suggest improvements
 
