@@ -81,17 +81,17 @@ parse_numchar <- function(x) {
 theme_common <- function() {
   theme_minimal() %+replace%
   theme(
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 16),
-    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 16, angle = 90),
+    axis.text.x = element_text(size = 14),
+    axis.text.y = element_text(size = 14),
+    axis.title.x = element_text(margin = margin(4, 4, 4, 4), size = 18),
+    axis.title.y = element_text(margin = margin(4, 4, 4, 4), size = 18, angle = 90),
 
     aspect.ratio = 3 / 4,
 
     plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
     panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
 
-    legend.text = element_text(size = 10),
+    legend.text = element_text(size = 16),
 
     panel.grid.major = element_line(color = "grey90"),
     panel.grid.minor = element_line(color = "grey90")
@@ -295,7 +295,20 @@ df_autos %>%
   theme_common()
 ```
 
+```{r three2}
+df_autos %>%
+  ggplot(aes(fuel_type, body_style)) +
+  geom_point(aes(color = compression_ratio)) +
+  theme_common()
+```
+
 __q3.4__ Is this a good visualization? Why or why not?
+
+```{r }
+df_autos %>%
+  ggplot(aes(body_style, compression_ratio, color = fuel_type)) +
+  geom_point()
+```
 
 <!-- solution-begin -->
 This is a terrible visualization! Here are a few reasons why:

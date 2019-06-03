@@ -23,6 +23,7 @@ ${SOLUTION}.Rmd: ${MASTER}.Rmd
 	-e '/# solution-(begin|end)/d' \
 	-e '/<!-- solution-(begin|end)/d' \
 	< $< > $@
+	Rscript -e "rmarkdown::render('${SOLUTION}.Rmd')"
 
 ${CHALLENGE}.Rmd: ${MASTER}.Rmd
 	sed -E \
@@ -33,6 +34,7 @@ ${CHALLENGE}.Rmd: ${MASTER}.Rmd
 	-e '/# task-(begin|end)/d' \
 	-e '/<!-- task-(begin|end)/d' \
 	< $< > $@
+	Rscript -e "rmarkdown::render('${CHALLENGE}.Rmd')"
 
 clean:
 	rm -f ${CHALLENGE}.Rmd ${SOLUTION}.Rmd

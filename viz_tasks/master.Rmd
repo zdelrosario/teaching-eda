@@ -5,6 +5,13 @@ date: 2019-02-16
 bibliography: bibtex_database.bib
 output: github_document
 ---
+<!-- solution-begin -->
+The following document is a handout-worksheet version of the "Visual Hierarchy
+activity. While this is a workable way to run this activity, I suggest printing
+cards from `grid.pdf` and separating the individual figures. This will allow
+students to more easily sort the cards. The instructions on this sheet are still
+useful for prompting students, though.
+<!-- solution-end -->
 
 In this lesson, we will illustrate different methods of visualizing information.
 The purpose of this exercise is to determine which methods are the most
@@ -75,9 +82,8 @@ mysave <- function(filename) {
 }
 ```
 
+```{r load_n_wrangle, echo=FALSE, include=FALSE, warning=FALSE}
 ## Data load + wrangle.
-
-```{r load_n_wrangle}
 # Parameters
 ## --------------------------------------------------
 ## Data filename
@@ -131,12 +137,10 @@ parse_numchar <- function(x) {
         TRUE ~ NA_integer_
       )
 }
-
 ```
 
-First, we need to load and wrangle the data a bit.
-
-```{r load_n_wrangle, warning=FALSE, message=FALSE}
+```{r rename, echo=FALSE, warning=FALSE, message=FALSE}
+## First, we need to load and wrangle the data a bit.
 df_raw <-
   read_csv(
     file_name,
@@ -160,16 +164,16 @@ df_raw <-
   )
 ```
 
-The string-coded numbers are obnoxious; let's map those to integers.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+## The string-coded numbers are obnoxious; let's map those to integers.
 df_raw %>% pull(num_of_doors) %>% unique()
 df_raw %>% pull(num_of_cylinders) %>% unique()
 ```
 
-Manual fixes for some of the variables.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+## Manual fixes for some of the variables.
 df_autos <-
   df_raw %>%
   mutate(
@@ -179,13 +183,11 @@ df_autos <-
   rowid_to_column(var = "id")
 ```
 
-Finally, we can analyze the data.
-
-<!-- solution-begin -->
 ## Define figures for different tasks
+See code in `master.Rmd`....
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Common scale
-```{r }
 fig_common <-
   df_autos %>%
   filter(
@@ -216,8 +218,8 @@ fig_common <-
 mysave("../images/01_common_scale.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Nonaligned scale
-```{r }
 fig_nonaligned <-
   df_autos %>%
   filter(
@@ -242,8 +244,8 @@ fig_nonaligned <-
 mysave("../images/02_nonaligned_scale.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Length
-```{r }
 fig_length <-
   df_autos %>%
   filter(
@@ -264,8 +266,8 @@ fig_length <-
 mysave("../images/03_length.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Angle
-```{r }
 fig_angle <-
   df_autos %>%
   filter(
@@ -289,8 +291,8 @@ fig_angle <-
 mysave("../images/04_angle.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Area
-```{r }
 fig_area <-
   df_autos %>%
   filter(
@@ -311,8 +313,8 @@ fig_area <-
 mysave("../images/05_area.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Color saturation
-```{r }
 fig_sat <-
   df_autos %>%
   filter(
@@ -332,8 +334,8 @@ fig_sat <-
 mysave("../images/06_sat.png")
 ```
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 ### Package the figures
-```{r }
 set.seed(102)
 df_figs <-
   tribble(
@@ -347,9 +349,27 @@ df_figs <-
   ) %>%
   sample_frac(size = 1)
 ```
-<!-- solution-end -->
 
 ### Plot all visual tasks figures
+
+The following six figures all show identical data -- they each depict a dataset
+detailing attributes about different models of car. Each observation in the
+dataset is a single model of vehicle; the attributes depicted below are the
+Drive style (Forward Wheel Drive (`fwd`) and Rear Wheel Drive (`rwd`)) and Body
+style (`hatchback`, `sedan`, or `wagon`). Each figure depicts the number of cars
+that fall into each category; for instance, the number of cars in the
+dataset that are both `fwd` and `hatchback`.
+
+Complete the following tasks:
+
+1. For each visualization, describe *how information is visually encoded.* Is
+   information shown via shape, position, color, size, or something else?
+2. Answer the question "Which is larger: The count of `wagons` with `fwd` Drive
+   OR the count of `wagons` with `rwd` Drive? By how much is one larger than the
+   other?
+3. Rank the following visualizations *in terms of how well they help you answer
+   question (2) above.* Rate the most helpful visualization as 1, and the least
+   helpful as 6; do not allow ties between visualizations.
 
 ```{r }
 df_figs %>% pull(fig)
