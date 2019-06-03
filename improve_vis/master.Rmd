@@ -8,6 +8,20 @@ output:
     toc_depth: 6
 ---
 
+This document uses the "Automobile Data Set" from the UCI Machine Learning
+database. You will need to
+[download](https://archive.ics.uci.edu/ml/datasets/Automobile) the relevant data
+file and change `file_name` below to point to the appropriate directory.
+
+<!-- solution-begin -->
+The document below produces visualizations for exploring the data, and provides
+discussion prompts for students to consider.
+
+Running `make` in this directory will create a `challenge.Rmd` document without
+the solution commentary. This can be useful if you want to assign this document
+for students to work through on their own.
+<!-- solution-end -->
+
 ```{r parameters, message = FALSE, warning = FALSE}
 # Libraries
 ## --------------------------------------------------
@@ -15,7 +29,7 @@ library(tidyverse)
 
 # Parameters
 ## --------------------------------------------------
-## Data filename
+## Data filename -- you will need to change this!
 file_name <- "~/Sync/data/autos/imports-85.data"
 ## Variable names from the UCI site
 var_names <-
@@ -173,7 +187,9 @@ This is a terrible visualization! Here are a few reasons why:
 
 __q3__ Construct a *quality* visualization of `compression_ratio`, `body_style`, and `fuel_type`.
 
-Hint: Start by swapping pairs of variables.
+Hint: Sometimes students can have a hard time making concrete suggestions. In
+this case, ask students to *swap* pairs of variables. Have them comment on what
+is better (or worse) about intermediate visualizations.
 
 ```{r three_repeat}
 df_autos %>%
