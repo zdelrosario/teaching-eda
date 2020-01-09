@@ -60,9 +60,6 @@ theme_common <- function() {
 
     aspect.ratio = asp_ratio,
 
-    ## plot.margin   = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
-    ## panel.spacing = unit(c(t = +0, b = +0, r = +0, l = +0), "cm"),
-
     legend.text = element_text(size = 10),
 
     panel.grid.major = element_line(color = "grey90"),
@@ -87,7 +84,8 @@ mysave <- function(filename) {
 # Parameters
 ## --------------------------------------------------
 ## Data filename
-file_name <- "~/Sync/data/autos/imports-85.data"
+## file_name <- "~/Sync/data/autos/imports-85.data"
+file_name <- "~/Data/imports-85.data"
 ## Variable names from the UCI site
 var_names <-
   c(
@@ -215,6 +213,7 @@ fig_common <-
     y = "Count",
     title = "COM"
   )
+fig_common
 mysave("../images/01_common_scale.png")
 ```
 
@@ -226,11 +225,13 @@ fig_nonaligned <-
     drive_wheels %in% sel_wheels,
     body_style %in% sel_style
   ) %>%
-  ggplot(aes(x = body_style)) +
+  ggplot(aes(x = body_style, fill = drive_wheels)) +
   geom_bar() +
+  ## Tail
   coord_flip() +
   ## scale_y_continuous(breaks = c(0, 10, 50)) +
   facet_grid(.~drive_wheels) +
+  guides(fill = FALSE) +
   theme_common() +
   theme(
     aspect.ratio = 4 / 3,
@@ -241,6 +242,7 @@ fig_nonaligned <-
     y = "Count",
     title = "NON"
   )
+fig_nonaligned
 mysave("../images/02_nonaligned_scale.png")
 ```
 
@@ -263,6 +265,7 @@ fig_length <-
     y = "Count",
     title = "LEN"
   )
+fig_length
 mysave("../images/03_length.png")
 ```
 
@@ -288,6 +291,7 @@ fig_angle <-
     y = "Count",
     title = "ANG"
   )
+fig_angle
 mysave("../images/04_angle.png")
 ```
 
@@ -301,15 +305,19 @@ fig_area <-
   ) %>%
   group_by(drive_wheels, body_style) %>%
   summarize(n = n()) %>%
-  ggplot(aes(body_style, drive_wheels, size = n)) +
+
+  ggplot(aes(body_style, drive_wheels, size = n, color = drive_wheels)) +
   geom_point() +
+  ## Tail
   scale_size_continuous(range = c(1, 15)) +
+  guides(color = FALSE) +
   theme_common() +
   labs(
     x = "Style",
     y = "Drive",
     title = "PIR2"
   )
+fig_area
 mysave("../images/05_area.png")
 ```
 
@@ -325,12 +333,15 @@ fig_sat <-
   summarize(n = n()) %>%
   ggplot(aes(body_style, drive_wheels, color = n)) +
   geom_point(size = 10) +
+  ## Tail
+  scale_color_continuous(name = "Counts") +
   theme_common() +
   labs(
     x = "Style",
     y = "Drive",
     title = "SAT"
   )
+fig_sat
 mysave("../images/06_sat.png")
 ```
 
